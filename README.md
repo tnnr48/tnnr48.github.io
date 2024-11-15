@@ -36,16 +36,21 @@ converge in distribution to the standard normal distribution $\mathcal{N}(0,1)$.
 In other words, the distribution of the sample mean, with samples drawn from some population that has a mean and variance (first and second moments), will be normally distributed for large enough sample size $n$. To prove the CLT we consider the sample mean
 $\bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i$ which, in the average equals
 
-\begin{center}
-$E[\bar{X}] = E[\frac{1}{n} \sum_{i=1}^{n} X_i] = \frac{1}{n} \sum_{i=1}^{n} E[X_i] = \frac{1}{n} n\mu = \mu$ \end{center}
+<div align="center">
+$E[\bar{X}] = E\left[\frac{1}{n} \sum_{i=1}^{n} X_i\right] = \frac{1}{n} \sum_{i=1}^{n} E[X_i] = \frac{1}{n} n\mu = \mu$
+</div>
 
+<p>
 and thus the average of the sample means is the population mean. The variance of the sample mean is
+</p>
 
-\begin{center}
-$Var(\bar{X}) = Var(\frac{1}{n} \sum_{i=1}^{n} X_i) = \frac{1}{n^2} \sum_{i=1}^{n} Var(X_i) = \frac{1}{n^2} \sum_{i=1}^{n} \sigma^2 = \frac{\sigma^2}{n}$
-\end{center}
+<div align="center">
+$Var(\bar{X}) = Var\left(\frac{1}{n} \sum_{i=1}^{n} X_i\right) = \frac{1}{n^2} \sum_{i=1}^{n} Var(X_i) = \frac{1}{n^2} \sum_{i=1}^{n} \sigma^2 = \frac{\sigma^2}{n}$
+</div>
 
+<p>
 thus the mean of the sampling distribution of sample means $\bar{X}_i$ is equal to the population mean with variance $\frac{\sigma^2}{n}$. To standardize the sample mean we center it around the mean of the sample means (the population mean) and divide by its standard deviation, which gives 
+</p>
 
 </body>
 </html>
