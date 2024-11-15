@@ -25,4 +25,26 @@
     <!-- Optional: Your CSS and other scripts -->
     <link rel="stylesheet" href="styles.css">
 </head>
+
+<h1>Welcome to My Project</h1>
+    
+    <p>
+        This project utilizes mathematical concepts to achieve its goals. For instance, consider Einstein's equation:
+    </p>
+    
+    \[
+        E = mc^2
+    \]
+    
+    <p>
+        And the Pythagorean theorem:
+    </p>
+    
+    \[
+        a^2 + b^2 = c^2
+    \]
+    
+    <p>
+        These equations are fundamental in physics and geometry, respectively.
+    </p>
 <body>
