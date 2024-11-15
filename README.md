@@ -142,6 +142,8 @@ E[e^{S^*t}] = E[e^{t(\frac{(X_1 - \mu)}{\sqrt{n}\sigma} + \frac{(X_2 - \mu)}{\sq
 
 as the sum of $n$ terms in the exponent is equal to the product of $n$ exponential terms. Note that each $E[e^{t(\frac{(X_i - \mu)}{\sqrt{n}\sigma}}]$ is a moment generating function for the standardized random variable $\frac{(X_i - \mu)}{\sqrt{n}\sigma}$ which we can denote as $M_{\frac{(X_i - \mu)}{\sqrt{n}\sigma}}(t)$. Also note that since $cM_A(t) = M_A(ct)$ for some scaling constant $c$ then $M_{\frac{(X_i - \mu)}{\sqrt{n}\sigma}}(t) = M_{(X_i - \mu)}(\frac{t}{{\sqrt{n}\sigma}})$ as $\frac{1}{\sqrt{n}\sigma}$ is a constant. We then have
 
-
+\[
+M_{S^*}(t) = (M_{(X_i - \mu)}(\frac{t}{{\sqrt{n}\sigma}}))^n
+\]
 </body>
 </html>
