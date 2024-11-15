@@ -53,7 +53,7 @@ thus the mean of the sampling distribution of sample means $\bar{X}_i$ is equal 
 </p>
 
 \[
-\frac{(\bar{X} - \mu)}{\frac{\sigma}{\sqrt{n}}} = \frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}$\end{center}
+\frac{(\bar{X} - \mu)}{\frac{\sigma}{\sqrt{n}}} = \frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}
 \]
 
 \[
@@ -67,6 +67,26 @@ thus the mean of the sampling distribution of sample means $\bar{X}_i$ is equal 
 We can call the standardized sample mean by a new random variable $\bar{X}_s$ (where s indicates 'standardized') and our goal is to show that this converges in distribution to the standard normal for large enough $n$. That is, $\bar{X}_s \xrightarrow{d} \mathcal{N}(0,1)$
 
 Now rather than dealing with sample means directly we can discuss $S$, the sum of our sample of iid random variables, $\sum_{i=1}^{n} X_i$. The sampling distribution of the sample sums $S$ has mean $E[S] = E[\sum_{i=1}^{n} X_i] = \sum_{i=1}^{n} E[X_i] = n\mu$ and variance $Var(S) = \sum_{i=1}^{n} Var(X_i) = n\sigma^2$ respectively. Standardizing the sample sum gives 
+
+\[
+$S^* = \frac{S - n\mu}{\sqrt{n}\sigma}
+\]
+
+\[
+$ = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
+\]
+
+\[
+= \frac{\frac{1}{\sqrt{n}} (\sum_{i=1}^{n} X_i - n\mu)}{\sigma}
+\]
+
+\[
+= \frac{\frac{1}{\sqrt{n}} \sum_{i=1}^{n} X_i - \sqrt{n}\mu}{\sigma}
+\]
+
+which we can see is equivalent to the standardized sample mean. Thus proving that sample sums converge to the standard normal distribution also proves that the distribution of sample means does and proves the CLT.
+
+We now consider the standard normal distribution and its moment generating function. The density function for the standard normal distribution is given by $f_Z(x) = f(x| \mu=0, \sigma^2=1) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}$ for some standard normal random variable $Z$. Then $M_Z(t) = E[e^{Xt}] = \int_{-\infty}^{\infty} e^{xt} \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}} dx$. We can simplify this like so
 
 </body>
 </html>
