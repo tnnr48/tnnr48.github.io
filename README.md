@@ -52,5 +52,21 @@ Var(\bar{X}) = Var\left(\frac{1}{n} \sum_{i=1}^{n} X_i\right) = \frac{1}{n^2} \s
 thus the mean of the sampling distribution of sample means $\bar{X}_i$ is equal to the population mean with variance $\frac{\sigma^2}{n}$. To standardize the sample mean we center it around the mean of the sample means (the population mean) and divide by its standard deviation, which gives 
 </p>
 
+\[
+\frac{(\bar{X} - \mu)}{\frac{\sigma}{\sqrt{n}}} = \frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}$\end{center}
+\]
+
+\[
+= \frac{\sqrt{n}(\frac{1}{n} \sum_{i=1}^{n} X_i - \mu)}{\sigma}
+\]
+
+\[
+= \frac{\frac{1}{\sqrt{n}} \sum_{i=1}^{n} X_i - \sqrt{n}\mu}{\sigma}
+\]
+
+We can call the standardized sample mean by a new random variable $\bar{X}_s$ (where s indicates 'standardized') and our goal is to show that this converges in distribution to the standard normal for large enough $n$. That is, $\bar{X}_s \xrightarrow{d} \mathcal{N}(0,1)$
+
+Now rather than dealing with sample means directly we can discuss $S$, the sum of our sample of iid random variables, $\sum_{i=1}^{n} X_i$. The sampling distribution of the sample sums $S$ has mean $E[S] = E[\sum_{i=1}^{n} X_i] = \sum_{i=1}^{n} E[X_i] = n\mu$ and variance $Var(S) = \sum_{i=1}^{n} Var(X_i) = n\sigma^2$ respectively. Standardizing the sample sum gives 
+
 </body>
 </html>
