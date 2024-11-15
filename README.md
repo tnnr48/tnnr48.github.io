@@ -69,11 +69,11 @@ We can call the standardized sample mean by a new random variable $\bar{X}_s$ (w
 Now rather than dealing with sample means directly we can discuss $S$, the sum of our sample of iid random variables, $\sum_{i=1}^{n} X_i$. The sampling distribution of the sample sums $S$ has mean $E[S] = E[\sum_{i=1}^{n} X_i] = \sum_{i=1}^{n} E[X_i] = n\mu$ and variance $Var(S) = \sum_{i=1}^{n} Var(X_i) = n\sigma^2$ respectively. Standardizing the sample sum gives 
 
 \[
-$S^* = \frac{S - n\mu}{\sqrt{n}\sigma}
+S^* = \frac{S - n\mu}{\sqrt{n}\sigma}
 \]
 
 \[
-$ = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
+= \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
 \]
 
 \[
@@ -87,6 +87,34 @@ $ = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
 which we can see is equivalent to the standardized sample mean. Thus proving that sample sums converge to the standard normal distribution also proves that the distribution of sample means does and proves the CLT.
 
 We now consider the standard normal distribution and its moment generating function. The density function for the standard normal distribution is given by $f_Z(x) = f(x| \mu=0, \sigma^2=1) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}$ for some standard normal random variable $Z$. Then $M_Z(t) = E[e^{Xt}] = \int_{-\infty}^{\infty} e^{xt} \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}} dx$. We can simplify this like so
+
+\[
+\int_{-\infty}^{\infty} e^{xt} \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}} dx
+\]
+
+\[
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{xt - \frac{x^2}{2}} dx$
+\]
+
+\[
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x^2 - 2xt)}$
+\]
+
+\[
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x^2 - 2xt + t^2) + \frac{1}{2}t^2}
+\]
+
+\[
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x-t)^2 + \frac{1}{2}t^2}
+\]
+
+and since $e^{\frac{1}{2}t^2}$ is a constant as there is no $x$ term (the integral is with respect to x) then we can factor it out of the integral which gives
+
+\[
+M_Z(t) = e^{\frac{1}{2}t^2} \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x-t)^2} = e^{\frac{1}{2}t^2}(1) = e^{\frac{1}{2}t^2}
+\]
+
+as our moment generating function for the standard normal distribution. Note that the integral simplifies to $1$ as it integrates the probability density function over all possible values of $Z$, which is $1$. In order to prove the CLT we need to show that the moment generating function for $S$ converges to $e^{\frac{1}{2}t^2}$. There are several properties of moment generating functions that are useful for this purpose and we will list here. If any two random variables $A, B$ are independent with moment generating functions $M_A(t), M_B(t)$ then $C = A + B$ has moment generating function $M_C(t) = M_A(t)M_B(t)$. This is easily demonstrated by $M_C(t) = E[e^{Ct}] = E[e^({A + B)t}] = E[e^{At + Bt}] = E[e^{At}e^{Bt}] = E[e^{At}]E[e^{Bt}] = M_A(t)M_B(t)$. Another property that we have already stated is that the $k^{th}$ derivative of the moment generating function gives the $k^{th}$ moment, which is evident from the expectation of the Taylor polynomial of $e^(x)$. 
 
 </body>
 </html>
