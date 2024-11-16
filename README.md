@@ -38,6 +38,12 @@ $$
 \bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i
 $$
 
-which, on average, equals \( \mu \).
+which, on average, equals \( \mu \). Thus, the average of the sample means is the population mean. The **variance of the sample mean** is
+
+$$
+\text{Var}(\bar{X}) = \text{Var}\left(\frac{1}{n} \sum_{i=1}^{n} X_i\right) = \frac{1}{n^2} \sum_{i=1}^{n} \text{Var}(X_i) = \frac{1}{n^2} \sum_{i=1}^{n} \sigma^2 = \frac{\sigma^2}{n}
+$$
+
+Thus, the mean of the **sampling distribution of sample means** \( \bar{X}_i \) is equal to the population mean with variance \( \frac{\sigma^2}{n} \). To **standardize the sample mean**, we center it around the mean of the sample means (the population mean) and divide by its standard deviation, which gives:
 </body>
 </html>
