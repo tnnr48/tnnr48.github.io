@@ -168,6 +168,83 @@ $$
 E\left[e^{S^* t}\right] = E\left[e^{t\left(\frac{(X_1 - \mu)}{\sqrt{n} \sigma} + \frac{(X_2 - \mu)}{\sqrt{n} \sigma} + \dots + \frac{(X_n - \mu)}{\sqrt{n} \sigma}\right)}\right] = \left[ E\left[e^{t \left(\frac{(X_i - \mu)}{\sqrt{n} \sigma}\right)} \right] \right]^n
 $$
 
+as the sum of \( n \) terms in the exponent is equal to the product of \( n \) exponential terms. Note that each \( E\left[e^{t\left(\frac{X_i - \mu}{\sqrt{n}\sigma}\right)}\right] \) is a moment generating function for the standardized random variable \( \frac{X_i - \mu}{\sqrt{n}\sigma} \), which we can denote as \( M_{\frac{X_i - \mu}{\sqrt{n}\sigma}}(t) \). Also note that since \( cM_A(t) = M_A(ct) \) for some scaling constant \( c \), then
+    
+$$
+M_{\frac{X_i - \mu}{\sqrt{n}\sigma}}(t) = M_{X_i - \mu}\left(\frac{t}{\sqrt{n}\sigma}\right)
+$$
+
+as \( \frac{1}{\sqrt{n}\sigma} \) is a constant. We then have
+
+$$
+M_{S^*}(t) = \left( M_{X_i - \mu}\left(\frac{t}{\sqrt{n}\sigma}\right) \right)^n
+$$
+
+This is a fairly complex function, and we can make it easier to work with by expanding it as a Taylor polynomial. We have
+
+$$
+M_{X_i - \mu}\left(\frac{t}{\sqrt{n}\sigma}\right) = E\left[1 + \left(\frac{t}{\sqrt{n}\sigma}\right)(X - \mu) + \left(\frac{t^2}{2n\sigma^2}\right)(X - \mu)^2 + \dots \right]
+$$
+
+where we can disregard the remaining terms. We then have
+
+$$
+M_{X_i - \mu}\left(\frac{t}{\sqrt{n}\sigma}\right) \approx E[1] + \frac{t}{\sqrt{n}\sigma} E[X - \mu] + \frac{t^2}{2n\sigma^2} E[(X - \mu)^2]
+$$
+
+$$
+= 1 + \frac{t}{\sqrt{n}\sigma} (E[X] - \mu) + \frac{t^2}{2n\sigma^2} \text{Var}(X)
+$$
+
+$$
+= 1 + \frac{t}{\sqrt{n}\sigma} (\mu - \mu) + \frac{t^2}{2n\sigma^2} \sigma^2
+$$
+
+$$
+= 1 + 0 + \frac{t^2}{2n}
+$$
+
+$$
+= 1 + \frac{t^2}{2n}
+$$
+
+where \( M_{S^*}(t) = \left(1 + \frac{t^2}{2n}\right)^n \). Now we know that we can rewrite this in terms of a limit of the form \( \lim_{n \to \infty} \left(1 + \frac{x}{n}\right)^n = e^x \) as our moment generating function has the same general form. Note that this limit expression for \( e^x \) is true due to the following logic. Suppose that we have some number \( L \) that is equal to \( \lim_{m \to \infty} \left(1 + \frac{t}{m}\right)^m \) and we want to know what this number \( L \) is. We can take the natural logarithm to both sides:
+
+$$
+\ln L = \ln \left(\lim_{m \to \infty} \left(1 + \frac{t}{m}\right)^m\right)
+$$
+
+which gives
+
+$$
+\lim_{m \to \infty} \ln\left(\left(1 + \frac{t}{m}\right)^m\right) = \lim_{m \to \infty} m \ln\left(1 + \frac{t}{m}\right) = \lim_{m \to \infty} \frac{\ln\left(1 + \frac{t}{m}\right)}{\frac{1}{m}}
+$$
+
+Now let \( x = \frac{t}{m} \) by substitution we have
+
+$$
+\lim_{x \to 0} \frac{\ln(1 + x)}{\frac{x}{t}} = t \lim_{x \to 0} \frac{\ln(1 + x)}{x} = \ln L
+$$
+
+Now in the limit this becomes the indeterminate form \( \frac{0}{0} \) so we will need to use L'Hôpital's rule which returns
+
+$$
+t \lim_{x \to 0} \frac{1}{1 + x} = t
+$$
+
+and since \( \ln L = t \), \( L = e^t \).
+
+Now if we take the limit as \( n \) goes to infinity, we have
+
+$$
+\lim_{n \to \infty} M_{S^*}(t) = \lim_{n \to \infty} \left(1 + \frac{t^2}{2n}\right)^n
+$$
+
+which is in the same general form as our limit for \( e^x \), except rather than exponentiation by \( x \) we have \( \frac{t^2}{2} \). Thus,
+
+$$
+\lim_{n \to \infty} M_{S^*}(t) = e^{\frac{t^2}{2}} = M_Z(t)
+$$
 
 </body>
 </html>
