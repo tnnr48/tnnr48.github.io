@@ -118,5 +118,45 @@ as our moment generating function for the standard normal distribution. Note tha
 
 Recall that the standardized sample sum $S^* = \frac{S - n\mu}{\sqrt{n}\sigma} = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}$ then
 
+\[
+$S^* = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
+\]
+
+\[
+$ = \frac{(X_1 + X_2 + ... + X_n) - n\mu}{\sqrt{n}\sigma}
+\]
+
+\[
+$= \frac{(X_1 - \mu) + (X_2 - \mu) + ... + (X_n - \mu)}{\sqrt{n}\sigma}
+\]
+
+\[
+$= \frac{(X_1 - \mu)}{\sqrt{n}\sigma} + \frac{(X_2 - \mu)}{\sqrt{n}\sigma} + ... + \frac{(X_n - \mu)}{\sqrt{n}\sigma}$
+\]
+
+and the moment generating function of $S^*$, $M_{S^*}(t) = E[e^{S^*t}]$ where
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Recall that the standardized sample sum $S^* = \frac{S - n\mu}{\sqrt{n}\sigma} = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}$ then
+
 
 </html>
