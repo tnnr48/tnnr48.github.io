@@ -146,20 +146,6 @@ as the sum of $n$ terms in the exponent is equal to the product of $n$ exponenti
 M_{S^*}(t) = (M_{(X_i - \mu)}(\frac{t}{{\sqrt{n}\sigma}}))^n
 \]
 
-This is a fairly complex function and we can make it easier to work with by expanding it as a Taylor polynomial. We have
-
-\[
-M_{(X_i - \mu)}(\frac{t}{{\sqrt{n}\sigma}}) = E[1 + (\frac{t}{{\sqrt{n}\sigma}})(X - \mu) + (\frac{t^2}{{2n\sigma^2}})(X - \mu)^2 + ...]
-\]
-
-where we can disregard the remaining terms. We then have
-
-\[
-M_{(X_i - \mu)}(\frac{t}{{\sqrt{n}\sigma}}) \approx E[1] + \frac{t}{{\sqrt{n}\sigma}}E[(X - \mu)] + \frac{t^2}{{2n\sigma^2}})E[(X - \mu)^2]
-\]
-
-
-
 
 
 
