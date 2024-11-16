@@ -108,43 +108,7 @@ We now consider the standard normal distribution and its moment generating funct
 = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x-t)^2 + \frac{1}{2}t^2}
 \]
 
-and since $e^{\frac{1}{2}t^2}$ is a constant as there is no $x$ term (the integral is with respect to x) then we can factor it out of the integral which gives
 
-\[
-M_Z(t) = e^{\frac{1}{2}t^2} \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x-t)^2} = e^{\frac{1}{2}t^2}(1) = e^{\frac{1}{2}t^2}
-\]
-
-as our moment generating function for the standard normal distribution. Note that the integral simplifies to $1$ as it integrates the probability density function over all possible values of $Z$, which is $1$. In order to prove the CLT we need to show that the moment generating function for $S$ converges to $e^{\frac{1}{2}t^2}$. There are several properties of moment generating functions that are useful for this purpose and we will list here. If any two random variables $A, B$ are independent with moment generating functions $M_A(t), M_B(t)$ then $C = A + B$ has moment generating function $M_C(t) = M_A(t)M_B(t)$. This is easily demonstrated by $M_C(t) = E[e^{Ct}] = E[e^({A + B)t}] = E[e^{At + Bt}] = E[e^{At}e^{Bt}] = E[e^{At}]E[e^{Bt}] = M_A(t)M_B(t)$. Another property that we have already stated is that the $k^{th}$ derivative of the moment generating function gives the $k^{th}$ moment, which is evident from the expectation of the Taylor polynomial of $e^(x)$. 
-
-Recall that the standardized sample sum $S^* = \frac{S - n\mu}{\sqrt{n}\sigma} = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}$ then
-
-\[
-$S^* = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
-\]
-
-\[
-$ = \frac{(X_1 + X_2 + ... + X_n) - n\mu}{\sqrt{n}\sigma}
-\]
-
-\[
-$= \frac{(X_1 - \mu) + (X_2 - \mu) + ... + (X_n - \mu)}{\sqrt{n}\sigma}
-\]
-
-\[
-$= \frac{(X_1 - \mu)}{\sqrt{n}\sigma} + \frac{(X_2 - \mu)}{\sqrt{n}\sigma} + ... + \frac{(X_n - \mu)}{\sqrt{n}\sigma}$
-\]
-
-and the moment generating function of $S^*$, $M_{S^*}(t) = E[e^{S^*t}]$ where
-
-\[
-E[e^{S^*t}] = E[e^{t(\frac{(X_1 - \mu)}{\sqrt{n}\sigma} + \frac{(X_2 - \mu)}{\sqrt{n}\sigma} + ... + \frac{(X_n - \mu)}{\sqrt{n}\sigma})} = E[e^{t(\frac{(X_i - \mu)}{\sqrt{n}\sigma}}]^n
-\]
-
-as the sum of $n$ terms in the exponent is equal to the product of $n$ exponential terms. Note that each $E[e^{t(\frac{(X_i - \mu)}{\sqrt{n}\sigma}}]$ is a moment generating function for the standardized random variable $\frac{(X_i - \mu)}{\sqrt{n}\sigma}$ which we can denote as $M_{\frac{(X_i - \mu)}{\sqrt{n}\sigma}}(t)$. Also note that since $cM_A(t) = M_A(ct)$ for some scaling constant $c$ then $M_{\frac{(X_i - \mu)}{\sqrt{n}\sigma}}(t) = M_{(X_i - \mu)}(\frac{t}{{\sqrt{n}\sigma}})$ as $\frac{1}{\sqrt{n}\sigma}$ is a constant. We then have
-
-\[
-M_{S^*}(t) = (M_{(X_i - \mu)}(\frac{t}{{\sqrt{n}\sigma}}))^n
-\]
 
 
 
