@@ -100,6 +100,72 @@ $$
 = \frac{\frac{1}{\sqrt{n}} \sum_{i=1}^{n} X_i - \sqrt{n}\mu}{\sigma}
 $$
 
-which we can see is equivalent to the standardized sample mean. Thus, proving that sample sums converge to the standard normal distribution also proves that the distribution of sample means does and proves the CLT.
+which we can see is equivalent to the standardized sample mean. Thus, proving that sample sums converge to the standard normal distribution also proves that the distribution of sample means does and proves the CLT. We now consider the standard normal distribution and its moment generating function. The density function for the standard normal distribution is given by \( f_Z(x) = f(x \mid \mu=0, \sigma^2=1) = \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}} \) for some standard normal random variable \( Z \). Then
+
+$$
+M_Z(t) = E\left[e^{Xt}\right] = \int_{-\infty}^{\infty} e^{xt} \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}} dx
+$$
+
+We can simplify this like so
+
+$$
+\int_{-\infty}^{\infty} e^{xt} \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}} dx
+$$
+
+$$
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{xt - \frac{x^2}{2}} dx
+$$
+
+$$
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x^2 - 2xt)} dx
+$$`
+
+$$
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x^2 - 2xt + t^2) + \frac{1}{2} t^2} dx
+$$`
+
+$$
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(x-t)^2 + \frac{1}{2} t^2} dx
+$$`
+
+and since \( e^{\frac{1}{2} t^2} \) is a constant as there is no \( x \) term (the integral is with respect to \( x \)), then we can factor it out of the integral which gives
+
+$$
+M_Z(t) = e^{\frac{1}{2} t^2} \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2} (x - t)^2} dx = e^{\frac{1}{2} t^2} \cdot 1 = e^{\frac{1}{2} t^2}
+$$
+
+as our moment generating function for the standard normal distribution. Note that the integral simplifies to \( 1 \) as it integrates the probability density function over all possible values of \( Z \), which is \( 1 \).
+
+In order to prove the CLT, we need to show that the moment generating function for \( S \) converges to \( e^{\frac{1}{2} t^2} \). There are several properties of moment generating functions that are useful for this purpose and we will list them here. If any two random variables \( A, B \) are independent with moment generating functions \( M_A(t), M_B(t) \), then \( C = A + B \) has moment generating function \( M_C(t) = M_A(t) M_B(t) \). This is easily demonstrated by
+
+$$
+M_C(t) = E\left[e^{Ct}\right] = E\left[e^{(A + B)t}\right] = E\left[e^{At + Bt}\right] = E\left[e^{At} e^{Bt}\right] = E\left[e^{At}\right] E\left[e^{Bt}\right] = M_A(t) M_B(t)
+$$
+
+Another property that we have already stated is that the \( k^{\text{th}} \) derivative of the moment generating function gives the \( k^{\text{th}} \) moment, which is evident from the expectation of the Taylor polynomial of \( e^{x} \).
+
+Recall that the standardized sample sum \( S^* = \frac{S - n\mu}{\sqrt{n} \sigma} = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n} \sigma} \), then
+
+$$
+S^* = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n} \sigma}
+$$`
+
+$$
+= \frac{(X_1 + X_2 + \dots + X_n) - n\mu}{\sqrt{n} \sigma}
+$$`
+
+$$
+= \frac{(X_1 - \mu) + (X_2 - \mu) + \dots + (X_n - \mu)}{\sqrt{n} \sigma}
+$$`
+
+$$
+= \frac{(X_1 - \mu)}{\sqrt{n} \sigma} + \frac{(X_2 - \mu)}{\sqrt{n} \sigma} + \dots + \frac{(X_n - \mu)}{\sqrt{n} \sigma}
+$$`
+
+and the moment generating function of \( S^* \), \( M_{S^*}(t) = E\left[e^{S^* t}\right] \) where
+
+$$
+E\left[e^{S^* t}\right] = E\left[e^{t\left(\frac{(X_1 - \mu)}{\sqrt{n} \sigma} + \frac{(X_2 - \mu)}{\sqrt{n} \sigma} + \dots + \frac{(X_n - \mu)}{\sqrt{n} \sigma}\right)}\right] = \left[ E\left[e^{t \left(\frac{(X_i - \mu)}{\sqrt{n} \sigma}\right)} \right] \right]^n
+$$
 </body>
 </html>
