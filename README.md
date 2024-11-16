@@ -246,5 +246,55 @@ $$
 \lim_{n \to \infty} M_{S^*}(t) = e^{\frac{t^2}{2}} = M_Z(t)
 $$
 
+We have shown that some standardized sum or sample mean is normally distributed with mean \( 0 \) and variance \( 1 \) i.e., \( \frac{\sqrt{n}(\bar{X} - \mu)}{\sigma} \sim \mathcal{N}(0,1) \). A common expression whose distribution is often not explained is \( \sqrt{n}(\bar{X} - \mu) \), this must also be normally distributed since it's equal to a normally distributed quantity multiplied by a constant. But what is its mean and variance? Consider
+
+$$
+\sqrt{n}(\bar{X} - \mu) = \sigma\left(\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}\right)
+$$
+
+and recall that \( E[cZ] \) where \( c \) is a constant and \( Z \) is a random variable is \( cE[Z] \) and
+
+$$
+\text{Var}(cZ) = E\left[(cZ - E[cZ])^2\right]
+$$
+
+$$
+= E\left[(cZ - cE[Z])^2\right]
+$$`
+
+$$
+= E\left[c^2(Z - E[Z])^2\right]
+$$`
+
+$$
+= c^2 E\left[(Z - E[Z])^2\right]
+$$`
+
+Here \( c = \sigma^2 \) and since \( \text{Var}\left(\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}\right) = 1 \), then
+
+$$
+\text{Var}\left(\sigma^2\left(\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}\right)\right) = \sigma^2 \cdot \text{Var}\left(\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}\right) = \sigma^2
+$$`
+
+Further, since
+
+$$
+E\left[\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}\right] = 0
+$$`
+
+then
+
+$$
+E\left[\sigma^2\left(\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}\right)\right] = \sigma^2 \cdot 0 = 0
+$$`
+
+and
+
+$$
+\sqrt{n}(\bar{X} - \mu) \sim \mathcal{N}(0, \sigma^2)
+$$`
+
+as is typically represented.
+
 </body>
 </html>
