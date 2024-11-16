@@ -51,5 +51,55 @@ $$
 $$
 
 Thus, the mean of the **sampling distribution of sample means** \( \bar{X}_i \) is equal to the population mean with variance \( \frac{\sigma^2}{n} \). To **standardize the sample mean**, we center it around the mean of the sample means (the population mean) and divide by its standard deviation, which gives
+
+$$
+\frac{(\bar{X} - \mu)}{\frac{\sigma}{\sqrt{n}}} = \frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}
+$$
+
+$$
+= \frac{\sqrt{n}\left(\frac{1}{n} \sum_{i=1}^{n} X_i - \mu\right)}{\sigma}
+$$
+
+$$
+= \frac{\frac{1}{\sqrt{n}} \sum_{i=1}^{n} X_i - \sqrt{n}\mu}{\sigma}
+$$
+
+We can call the standardized sample mean by a new random variable \( \bar{X}_s \) (where \( s \) indicates 'standardized') and our goal is to show that this converges in distribution to the standard normal for large enough \( n \). That is, 
+
+$$
+\bar{X}_s \xrightarrow{d} \mathcal{N}(0,1)
+$$
+
+Now, rather than dealing with sample means directly, we can discuss \( S \), the sum of our sample of i.i.d. random variables, \( \sum_{i=1}^{n} X_i \). The **sampling distribution of the sample sums** \( S \) has mean 
+
+$$
+E[S] = E\left[\sum_{i=1}^{n} X_i\right] = \sum_{i=1}^{n} E[X_i] = n\mu
+$$
+
+and variance 
+
+$$
+\text{Var}(S) = \sum_{i=1}^{n} \text{Var}(X_i) = n\sigma^2
+$$
+
+respectively. **Standardizing the sample sum** gives 
+
+$$
+S^* = \frac{S - n\mu}{\sqrt{n}\sigma}
+$$
+
+$$
+= \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
+$$
+
+$$
+= \frac{\frac{1}{\sqrt{n}} \left(\sum_{i=1}^{n} X_i - n\mu\right)}{\sigma}
+$$
+
+$$
+= \frac{\frac{1}{\sqrt{n}} \sum_{i=1}^{n} X_i - \sqrt{n}\mu}{\sigma}
+$$
+
+which we can see is equivalent to the standardized sample mean. Thus, proving that sample sums converge to the standard normal distribution also proves that the distribution of sample means does and proves the CLT.
 </body>
 </html>
