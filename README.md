@@ -294,7 +294,22 @@ $$
 \sqrt{n}(\bar{X} - \mu) \sim \mathcal{N}(0, \sigma^2)
 $$`
 
-as is typically represented.
+as is typically represented. A useful result that we will encounter in a later section is the distribution of \( \sqrt{n}\bar{X} \) which is given by \( \mathcal{N}(\sqrt{n}\mu, \sigma^2) \). Why? Because 
 
+$$
+E\left[\sqrt{n}(\bar{X} - \mu) + \sqrt{n}\mu\right] = 0 + E\left[\sqrt{n}\bar{X}\right] = \sqrt{n}\mu
+$$
+
+and 
+
+$$
+\text{Var}\left(\sqrt{n}(\bar{X} - \mu) + \sqrt{n}\mu\right) = \text{Var}\left(\sqrt{n}\bar{X}\right)
+$$
+
+$$
+= n \cdot \text{Var}(\bar{X}) = n \cdot \frac{\sigma^2}{n} = \sigma^2
+$$
+
+Similarly, \( n\bar{X} \sim \mathcal{N}(n\mu, n\sigma^2) \). This is significant as we now know that our coefficient estimates, which are equal to big sums, are also normally distributed with some variance the square root of which is their standard error.
 </body>
 </html>
