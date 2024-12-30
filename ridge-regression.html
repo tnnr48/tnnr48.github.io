@@ -11,505 +11,458 @@
 
   <h2>Ridge Regression</h2>
 
-  <p>
-    \textbf{Perfect collinearity between predictors} is a major modeling problem 
-    that can be identified by calculating the correlation between predictors. 
-    When this value is $1$ or $-1$ we have perfect collinearity, the predictors 
-    are exactly linearly related to each other, and for values close to this we 
-    have a near exact relationship. As discussed in the derivation of the VIF, 
-    collinearity makes coefficient estimates unstable because it's difficult to 
-    determine each predictor's individual importance in the model. The problem 
-    is so severe because the matrix $X^TX$, used in the calculation of our 
-    coefficient estimates $\vec{\beta}$, is no longer invertible when $X$ does 
-    not have full rank. This leads to estimation breaking down entirely, making 
-    violations of this assumption substantially worse than all others. Perfect 
-    multicollinearity can typically be dealt with by removing one of the 
-    collinear predictors, such as if we have two temperature measurments one in 
-    Fahrenheit and the other in Celsius when Fahrenheit alone would suffice. 
-    When this is not a reasonable thing to do methods such as 
-    \textbf{Ridge Regression} can be used to return valid output when handling 
-    perfect (or very high) multicollinearity.
-  </p>
-
-  <p>
-    OLS is estimated by optimizing the model for the $SSR$, 
-    $\sum_{i=1}^{n} (y_i - \hat{y_i})^2$. Ridge regression adds a penalty term 
-    such that $\sum_{i=1}^{n} (y_i - \hat{y_i})^2 + \sum_{j=1}^{k} \lambda \hat{\beta}_j$
-    where $\sum_{j=1}^{k} \lambda \hat{\beta}_j^2$ is the penalty. That is, 
-    Ridge regression punishes the model for having large coefficient estimates 
-    $\hat{\beta}_j$ since the square of these values will be larger. Further, 
-    $\lambda$ is some non negative number which controls the size of the 
-    penalty, when $\lambda = 0$ then Ridge regression is OLS. Why do we penalize 
-    coefficient size? Because when we have strong or perfect multicollinearity 
-    in our model by the VIF we know that coefficient estimates are prone to very 
-    large swings in their values due to high variance. Thus, forcing the 
-    coefficient values to tend towards 0 is equivalent to forcing them to be 
-    more 'stable' and reduces their variance. The Ridge model may, equivalently, 
-    be written as
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      (\vec{y} - X\vec{\hat{\beta}})^T(\vec{y} - X\vec{\hat{\beta}}) 
-      + \lambda\vec{\hat{\beta}}^T\vec{\hat{\beta}}
-    \]
-  </p>
-
-  <p>
-    we now set this expression equal to $0$ and evaluate the gradient with 
-    respect to $\vec{\hat{\beta}}$ which gives
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \nabla_{\vec{\hat{\beta}}}[(\vec{y} - X\vec{\hat{\beta}})^T(\vec{y} - X\vec{\hat{\beta}})]
-      + \nabla_{\vec{\hat{\beta}}}(\lambda \vec{\hat{\beta}}^T \vec{\hat{\beta}})
-      = -2X^T(\vec{y}-X\vec{\hat{\beta}}) + 2\lambda \vec{\hat{\beta}} = 0
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      2X^T(\vec{y}-X\vec{\hat{\beta}}) = 2\lambda \vec{\hat{\beta}}, 
-      \quad X^T(\vec{y}-X\vec{\hat{\beta}}) = \lambda \vec{\hat{\beta}}
-    \]
-  </p>
-
-  <p>
-    where
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      X^T\vec{y} - X^TX\vec{\hat{\beta}} = \lambda\vec{\hat{\beta}}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \lambda\vec{\hat{\beta}} + X^TX\vec{\hat{\beta}} = X^T\vec{y}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      (X^TX + \lambda I)\vec{\hat{\beta}} = X^T\vec{y}
-    \]
-  </p>
-
-  <p>
-    now suppose $X$ is not a full rank matrix, then neither is $X^TX$ which is 
-    also not invertible. This situation occurs when we have perfect 
-    multicollinearity and is pertinent to our derivation. By adding a positive 
-    constant to the diagonal of $X^TX$ every column is now linearly independent 
-    from the other and we have the full rank matrix $\lambda I + X^TX$. Thus
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \vec{\hat{\beta}} = (X^TX + \lambda I)^{-1}X^T\vec{y}
-    \]
-  </p>
-
-  <p>
-    When we do not have perfect multicollinearity but have strong collinearity 
-    then $X^TX$ is full rank and invertible, but will not provide very stable 
-    coefficient estimates. In which case, Ridge regression is still relevant as 
-    it makes such estimates more stable. It is important to note that while 
-    Ridge regression solves the collinearity problem, it produces a biased 
-    estimate of our coefficients $\vec{\hat{\beta}}$ which we can demonstrate 
-    like so
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      (X^TX + \lambda I)^{-1}X^T\vec{y} 
-      = (X^TX + \lambda I)^{-1}X^T(X\vec{\beta} + \vec{\epsilon})
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = (X^TX + \lambda I)^{-1}X^TX\vec{\beta} 
-        + (X^TX + \lambda I)^{-1}X^T\vec{\epsilon}
-    \]
-  </p>
-
-  <p>
-    assuming that the mean $0$ errors assumption holds then we have
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      E[(X^TX + \lambda I)^{-1}X^TX\vec{\beta} + (X^TX + \lambda I)^{-1}X^T\vec{\epsilon}] 
-      = 
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      E[(X^TX + \lambda I)^{-1}X^TX\vec{\beta}] 
-      + E[(X^TX + \lambda I)^{-1}X^T\vec{\epsilon}]
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = E[(X^TX + \lambda I)^{-1}X^TX\vec{\beta}] + 0
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = E[(X^TX + \lambda I)^{-1}X^TX\vec{\beta}]
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = (X^TX + \lambda I)^{-1}X^TX\vec{\beta}
-    \]
-  </p>
-
-  <p>
-    which is a biased estimator of the true unknown coefficients $\vec{\beta}$. 
-    The ridge estimator only provides an unbiased estimate when $\lambda = 0$ as 
-    in that case it is equal to OLS. Thus, $\lambda$ is a constant that 
-    introduces the bias into the estimate of $\vec{\beta}$. We now seek to 
-    obtain the variance of the ridge estimator
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      Var((X^TX + \lambda I)^{-1}X^T\vec{y}) 
-      = \sigma^2(X^TX + \lambda I)^{-1}X^TX(X^TX + \lambda I)^{-1}
-    \]
-  </p>
-
-  <p>
-    given by a property that we have previously applied, 
-    $Var(A\vec{x}) = A \,Var(\vec{x})\,A^T$ where $A$ is a constant matrix and 
-    $\vec{x}$ is a random vector. What we have so far demonstrated is that the 
-    Ridge estimate introduces bias into the coefficient estimates, but how does 
-    its variance compare with that of OLS? Ridge regression is meant to lower 
-    the variance of our coefficient estimates, so its values should be 
-    consistently smaller than the variance of the OLS estimates. We have
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      Var(\vec{\hat{\beta}}_{OLS}) - Var(\vec{\hat{\beta}}_{RIDGE}) 
-      = \sigma^2(X^TX)^{-1} 
-        - \sigma^2(X^TX + \lambda I)^{-1}X^TX(X^TX + \lambda I)^{-1}
-    \]
-  </p>
-
-  <p>
-    and this difference should always be positive, which in matrix terms we 
-    think of as a positive definite matrix. To be clear, we state that dot 
-    product between some vector $\vec{x}$ and $A\vec{x}$ where $A$ is a positive 
-    definite matrix and $A\vec{x}$ is a transformation of $\vec{x}$, is 
-    $\vec{x}A\vec{x} > 0$. That is, a positive definite matrix never flips any 
-    vector about the $y$ axis and will always point in the same general 
-    direction and thus acts akin to a positive number. Proving that the 
-    difference $Var(\vec{\hat{\beta}}_{OLS}) - Var(\vec{\hat{\beta}}_{RIDGE})$ 
-    is always a positive definite matrix is involved and we provide it below.
-  </p>
-
-  <p>
-    Suppose that we have a matrix 
-    $W = X^TX(X^TX + \lambda I)^{-1}$ which is some invertible matrix. Then the 
-    ridge estimator's variance
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      Var(\vec{\hat{\beta}}_{RIDGE}) 
-      = \sigma^2(X^TX + \lambda I)^{-1}X^TX(X^TX + \lambda I)^{-1}
-    \]
-  </p>
-
-  <p>
-    may be rewritten as
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2(X^TX + \lambda I)^{-1}X^TX(X^TX)^{-1}X^TX(X^TX + \lambda I)^{-1}
-    \]
-  </p>
-
-  <p>
-    because $X^TX(X^TX)^{-1}$ is a multiple of $1$. Further, we observe that 
-    $W^T = (X^TX + \lambda I)^{-1}X^TX$ and so we may rewrite our variance 
-    expression as
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2W^T(X^TX)^{-1}W
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2(X^TX)^{-1} - \sigma^2W^T(X^TX)^{-1}W 
-      = \sigma^2((X^TX)^{-1} - W^T(X^TX)^{-1}W)
-    \]
-  </p>
-
-  <p>
-    it is also true that 
-    $W^T(W^T)^{-1}(X^TX)^{-1}W^{-1}W = (X^TX)^{-1}$ since it is equivalent to 
-    multiplying $(X^TX)^{-1}$ by two identity matrices. We can then substitute 
-    this into $(X^TX)^{-1}$ and obtain
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      W^T(W^T)^{-1}(X^TX)^{-1}W^{-1}W - W^T(X^TX)^{-1}W 
-      = W^T((W^T)^{-1}(X^TX)^{-1}W^{-1})W
-    \]
-  </p>
-
-  <p>
-    since 
-    $W = X^TX(X^TX + \lambda I)^{-1}$ we can determine its inverse and transpose 
-    like so. We know that
-  </p>
-
-  <p>
-    $W = AB$ where $A = X^TX$ and $B = (X^TX + \lambda I)$ and that 
-    $W^{-1} = B^{-1}A^{-1}$ thus
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      W^{-1} = (X^TX + \lambda I)(X^TX)^{-1}
-    \]
-  </p>
-
-  <p>
-    and $W^T = B^TA^T$ which gives
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      W^T = ((X^TX + \lambda I)^{-1})^T(X^TX)^T 
-      = (X^TX + \lambda I)^{-1}(X^TX)
-    \]
-  </p>
-
-  <p>
-    we have 
-    $(W^T)^{-1} = ((X^TX + \lambda I)^{-1}(X^TX))^{-1} 
-    = (X^TX)^{-1}(X^TX + \lambda I)$ as a result. Rewriting our complete 
-    expression and substituting these quantities into it gives
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2((X^TX)^{-1} - W^T(X^TX)^{-1}W) 
-      = \sigma^2(W^T((W^T)^{-1}(X^TX)^{-1}W^{-1})W - W^T(X^TX)^{-1}W)
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = \sigma^2W^T((W^T)^{-1}(X^TX)^{-1}W^{-1} - (X^TX)^{-1})W
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = \sigma^2W^T((X^TX)^{-1}(X^TX + \lambda I)(X^TX)^{-1}(X^TX + \lambda I)(X^TX)^{-1} 
-                   - (X^TX)^{-1})W
-    \]
-  </p>
-
-  <p>
-    where
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      (X^TX)^{-1}(X^TX + \lambda I) = I + (X^TX)^{-1}\lambda
-    \]
-  </p>
-
-  <p>
-    giving us
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2W^T((I + (X^TX)^{-1}\lambda)(X^TX)^{-1}
-                  (I + (X^TX)^{-1}\lambda) - (X^TX)^{-1})W
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = \sigma^2W^T(((X^TX)^{-1} + \lambda(X^TX)^{-2})
-                    (I + (X^TX)^{-1}\lambda) - (X^TX)^{-1})W
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = \sigma^2W^T(((X^TX)^{-1} + \lambda(X^TX)^{-2})(I + (X^TX)^{-1}\lambda) 
-                    - (X^TX)^{-1})W
-    \]
-  </p>
-
-  <p>
-    we now multiply 
-    $((X^TX)^{-1} + \lambda(X^TX)^{-2})(I + (X^TX)^{-1}\lambda)$ which returns
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      (X^TX)^{-1}(I) = (X^TX)^{-1}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \lambda(X^TX)^{-2}(I) = \lambda(X^TX)^{-2}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      (X^TX)^{-1}((X^TX)^{-1}\lambda) = (X^TX)^{-2}\lambda
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \lambda(X^TX)^{-2}((X^TX)^{-1}\lambda) = \lambda^2(X^TX)^{-3}
-    \]
-  </p>
-
-  <p>
-    by the additive property of multiplication of exponents. Our result is
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      ((X^TX)^{-1} + \lambda(X^TX)^{-2})(I + (X^TX)^{-1}\lambda) 
-      = (X^TX)^{-1} + \lambda(X^TX)^{-2} + (X^TX)^{-2}\lambda 
-        + \lambda^2(X^TX)^{-3}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = (X^TX)^{-1} + 2(X^TX)^{-2}\lambda + \lambda^2(X^TX)^{-3}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2W^T(((X^TX)^{-1} + \lambda(X^TX)^{-2})(I + (X^TX)^{-1}\lambda) 
-                  - (X^TX)^{-1})W
-      = \sigma^2W^T((X^TX)^{-1} + 2(X^TX)^{-2}\lambda + \lambda^2(X^TX)^{-3} 
-                    - (X^TX)^{-1})W
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = \sigma^2W^T(2(X^TX)^{-2}\lambda + \lambda^2(X^TX)^{-3})W
-    \]
-  </p>
-
-  <p>
-    recalling that $W = X^TX(X^TX + \lambda I)^{-1}$ and 
-    $W^T = (X^TX + \lambda I)^{-1}X^TX$ we have
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2(X^TX + \lambda I)^{-1}X^TX(2(X^TX)^{-2}\lambda 
-      + \lambda^2(X^TX)^{-3})X^TX(X^TX + \lambda I)^{-1}
-    \]
-  </p>
-
-  <p>
-    multiplying through by $X^TX$ gives
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \sigma^2(X^TX + \lambda I)^{-1}(2\lambda I 
-      + \lambda^2(X^TX)^{-1})(X^TX + \lambda I)^{-1}
-    \]
-  </p>
-
-  <p>
-    where for $\vec{y}^T(X^TX)\vec{y}$, where $\vec{y}$ is some nonzero vector, 
-    let $\vec{z} = X\vec{y}$ and $\vec{z}^T = \vec{y}^TX^T$ then the expression 
-    is equivalently $\vec{z}^T\vec{z} = ||\vec{z}||^2$ which is always greater 
-    than zero. Therefore, $X^TX$ is positive definite and for any $\lambda > 0$ 
-    $(X^TX + \lambda I)$ is also positive definite. Therefore 
-    $(X^TX + \lambda I)$ and its inverse are both positive definite matrices. 
-    Now let $z = (X^TX + \lambda I)^{-1}\vec{y}$ and suppose that
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \vec{y}^T(Var(\vec{\hat{\beta}}_{OLS}) 
-        - Var(\vec{\hat{\beta}}_{RIDGE}))\vec{y} 
-      =
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \vec{y}^T(\sigma^2(X^TX + \lambda I)^{-1}
-      (2\lambda I + \lambda^2(X^TX)^{-1})(X^TX + \lambda I)^{-1})\vec{y}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = \sigma^2\vec{z}^T(2\lambda I + \lambda^2(X^TX)^{-1})\vec{z}
-    \]
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      = 2\sigma^2\lambda\vec{z}^T\vec{z} 
-        + \lambda^2\sigma^2\vec{z}^T(X^TX)^{-1}\vec{z}
-    \]
-  </p>
-
-  <p>
-    where $\vec{z}^T\vec{z}$ is greater than $0$ and since we have demonstrated 
-    that $X^TX$ is a positive definite matrix then 
-    $\vec{z}^T(X^TX)^{-1}\vec{z}$ is also greater than $0$. Thus the entire 
-    expression is greater than $0$ and
-  </p>
-
-  <p style="text-align:center;">
-    \[
-      \vec{y}^T(Var(\vec{\hat{\beta}}_{OLS})) 
-      - Var(\vec{\hat{\beta}}_{RIDGE}))\vec{y} > 0
-    \]
-  </p>
-
-  <p>
-    which means that the matrix represented by the difference in the variance 
-    matrices for the OLS and Ridge estimators is a positive definite matrix. 
-    Therefore, the Ridge estimator, for $\lambda > 0$, always increases the bias 
-    and reduces the variance of the estimated coefficients $\vec{\hat{\beta}}$ 
-    compared to the OLS model.
-  </p>
-
-  <p>
-    <a href="index.html">Return to Home Page</a>
-  </p>
+ <p>
+  <strong>Perfect collinearity between predictors</strong> is a major modeling problem that can be 
+  identified by calculating the correlation between predictors. When this value is 
+  \(1\) or \(-1\) we have perfect collinearity, the predictors are exactly linearly 
+  related to each other, and for values close to this we have a near exact relationship. 
+  As discussed in the derivation of the VIF, collinearity makes coefficient estimates 
+  unstable because it's difficult to determine each predictor's individual importance in 
+  the model. The problem is so severe because the matrix \(X^T X\), used in the 
+  calculation of our coefficient estimates \(\vec{\beta}\), is no longer invertible when 
+  \(X\) does not have full rank. This leads to estimation breaking down entirely, making 
+  violations of this assumption substantially worse than all others.
+</p>
+
+<p>
+  Perfect multicollinearity can typically be dealt with by removing one of the 
+  collinear predictors, such as if we have two temperature measurements (one in Fahrenheit 
+  and the other in Celsius) when Fahrenheit alone would suffice. When this is not a 
+  reasonable thing to do, methods such as <strong>Ridge Regression</strong> can be used to 
+  return valid output when handling perfect (or very high) multicollinearity.
+</p>
+
+<!-- 2. Explain OLS and SSR, then ridge penalty -->
+<p>
+  OLS is estimated by optimizing the model for the 
+  \(SSR = \sum_{i=1}^{n} (y_i - \hat{y_i})^2.\) 
+  Ridge regression adds a penalty term such that 
+  \(\sum_{i=1}^{n} (y_i - \hat{y_i})^2 + \sum_{j=1}^{k} \lambda \hat{\beta}_j,\) 
+  where \(\sum_{j=1}^{k} \lambda \hat{\beta}_j^2\) is the penalty. 
+</p>
+
+<p>
+  That is, Ridge regression punishes the model for having large coefficient estimates 
+  \(\hat{\beta}_j\) since the square of these values will be larger. Further, 
+  \(\lambda\) is some non-negative number which controls the size of the penalty; 
+  when \(\lambda = 0\) then Ridge regression is OLS. Why do we penalize coefficient size? 
+  Because when we have strong or perfect multicollinearity in our model (by the VIF) 
+  we know that coefficient estimates are prone to very large swings in their values 
+  due to high variance. Thus, forcing the coefficient values to tend towards 0 is 
+  equivalent to forcing them to be more “stable” and reduces their variance.
+</p>
+
+<p>
+  The Ridge model may, equivalently, be written as
+</p>
+
+<!-- 3. Display the Ridge expression -->
+<p style="text-align:center;">
+  \[
+    (\vec{y} - X\vec{\hat{\beta}})^T(\vec{y} - X\vec{\hat{\beta}})
+    + \lambda \,\vec{\hat{\beta}}^T\vec{\hat{\beta}}.
+  \]
+</p>
+
+<p>
+  We now set this expression equal to \(0\) and evaluate the gradient with respect to 
+  \(\vec{\hat{\beta}}\) which gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    \nabla_{\vec{\hat{\beta}}}
+      \Bigl[(\vec{y} - X\vec{\hat{\beta}})^T(\vec{y} - X\vec{\hat{\beta}})\Bigr]
+    + \nabla_{\vec{\hat{\beta}}}\bigl(\lambda \,\vec{\hat{\beta}}^T \vec{\hat{\beta}}\bigr)
+    = -2\,X^T(\vec{y}-X\vec{\hat{\beta}}) + 2\,\lambda \,\vec{\hat{\beta}} = 0,
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    2\,X^T(\vec{y}-X\vec{\hat{\beta}}) = 2\,\lambda \,\vec{\hat{\beta}}, 
+    \quad
+    X^T(\vec{y}-X\vec{\hat{\beta}}) = \lambda \,\vec{\hat{\beta}}.
+  \]
+</p>
+
+<p>
+  Where
+</p>
+
+<p style="text-align:center;">
+  \[
+    X^T\vec{y} - X^TX\vec{\hat{\beta}} = \lambda \,\vec{\hat{\beta}},
+    \quad
+    \lambda\,\vec{\hat{\beta}} + X^TX\vec{\hat{\beta}} = X^T\vec{y},
+    \quad
+    (X^TX + \lambda I)\,\vec{\hat{\beta}} = X^T\vec{y}.
+  \]
+</p>
+
+<p>
+  Now suppose \(X\) is not a full rank matrix; then neither is \(X^T X\), which is also 
+  not invertible. This situation occurs when we have perfect multicollinearity and is 
+  pertinent to our derivation. By adding a positive constant to the diagonal of \(X^T X\), 
+  every column is now linearly independent from the other and we have the full-rank matrix 
+  \(\lambda I + X^TX.\) Thus
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{\hat{\beta}} = (X^TX + \lambda I)^{-1}\,X^T\vec{y}.
+  \]
+</p>
+
+<p>
+  When we do not have perfect multicollinearity but have strong collinearity then 
+  \(X^T X\) is full rank and invertible, but will not provide very stable coefficient 
+  estimates. In which case, Ridge regression is still relevant as it makes such estimates 
+  more stable. It is important to note that while Ridge regression solves the collinearity 
+  problem, it produces a biased estimate of our coefficients \(\vec{\hat{\beta}}\), 
+  which we can demonstrate like so:
+</p>
+
+<!-- 4. Display the demonstration of bias -->
+<p style="text-align:center;">
+  \[
+    (X^TX + \lambda I)^{-1}X^T\vec{y}
+    = (X^TX + \lambda I)^{-1}X^T(X\vec{\beta} + \vec{\epsilon})
+    = (X^TX + \lambda I)^{-1}X^TX\vec{\beta}
+      + (X^TX + \lambda I)^{-1}X^T\vec{\epsilon}.
+  \]
+</p>
+
+<p>
+  Assuming that the mean 0 errors assumption holds, then we have
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\Bigl[
+      (X^TX + \lambda I)^{-1}X^TX\vec{\beta}
+      + (X^TX + \lambda I)^{-1}X^T\vec{\epsilon}
+    \Bigr]
+    =
+    E\bigl[(X^TX + \lambda I)^{-1}X^TX\vec{\beta}\bigr]
+    + E\bigl[(X^TX + \lambda I)^{-1}X^T\vec{\epsilon}\bigr]
+  \]
+  \[
+    = E\bigl[(X^TX + \lambda I)^{-1}X^TX\vec{\beta}\bigr] + 0
+    = E\bigl[(X^TX + \lambda I)^{-1}X^TX\vec{\beta}\bigr]
+    = (X^TX + \lambda I)^{-1}X^TX\vec{\beta}.
+  \]
+</p>
+
+<p>
+  Which is a biased estimator of the true unknown coefficients \(\vec{\beta}\). The Ridge 
+  estimator only provides an unbiased estimate when \(\lambda = 0\) as in that case it is 
+  equal to OLS. Thus, \(\lambda\) is a constant that introduces bias into the estimate of 
+  \(\vec{\beta}\). We now seek to obtain the variance of the ridge estimator
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var\bigl((X^TX + \lambda I)^{-1}X^T\vec{y}\bigr)
+    = \sigma^2\,(X^TX + \lambda I)^{-1}X^TX(X^TX + \lambda I)^{-1},
+  \]
+</p>
+
+<p>
+  given by a property that we have previously applied, 
+  \(Var(A\vec{x}) = A\,Var(\vec{x})\,A^T\), where \(A\) is a constant matrix and 
+  \(\vec{x}\) is a random vector. What we have so far demonstrated is that the Ridge 
+  estimate introduces bias into the coefficient estimates, but how does its variance 
+  compare with that of OLS? Ridge regression is meant to lower the variance of our 
+  coefficient estimates, so its values should be consistently smaller than the variance 
+  of the OLS estimates. We have
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var(\vec{\hat{\beta}}_{OLS}) - Var(\vec{\hat{\beta}}_{RIDGE})
+    = \sigma^2 (X^TX)^{-1}
+      - \sigma^2 (X^TX + \lambda I)^{-1}X^TX(X^TX + \lambda I)^{-1},
+  \]
+</p>
+
+<p>
+  and this difference should always be positive, which in matrix terms we think of as a 
+  positive definite matrix. To be clear, we state that the dot product between some vector 
+  \(\vec{x}\) and \(A\vec{x}\), where \(A\) is a positive definite matrix and \(A\vec{x}\) 
+  is a transformation of \(\vec{x}\), is \(\vec{x}A\vec{x} > 0\). That is, a positive 
+  definite matrix never flips any vector about the \(y\) axis and will always point in the 
+  same general direction and thus acts akin to a positive number. Proving that the 
+  difference \(Var(\vec{\hat{\beta}}_{OLS}) - Var(\vec{\hat{\beta}}_{RIDGE})\) is always 
+  a positive definite matrix is involved and we provide it below.
+</p>
+
+<!-- 5. Show the matrix derivation for W -->
+<p>
+  Suppose that we have a matrix 
+  \(W = X^TX(X^TX + \lambda I)^{-1}\) which is some invertible matrix. 
+  Then the ridge estimator's variance
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var(\vec{\hat{\beta}}_{RIDGE})
+    = \sigma^2\,(X^TX + \lambda I)^{-1}X^TX(X^TX + \lambda I)^{-1}
+  \]
+</p>
+
+<p>
+  may be rewritten as
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\,(X^TX + \lambda I)^{-1}X^TX(X^TX)^{-1}X^TX(X^TX + \lambda I)^{-1},
+  \]
+</p>
+
+<p>
+  because \(X^TX(X^TX)^{-1}\) is a multiple of 1. Further, we observe that 
+  \(W^T = (X^TX + \lambda I)^{-1}X^TX,\) and so we may rewrite our variance expression as
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\,W^T\,(X^TX)^{-1}W.
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\,(X^TX)^{-1} - \sigma^2\,W^T(X^TX)^{-1}W 
+    = \sigma^2\bigl((X^TX)^{-1} - W^T(X^TX)^{-1}W\bigr).
+  \]
+</p>
+
+<p>
+  It is also true that 
+  \(W^T(W^T)^{-1}(X^TX)^{-1}W^{-1}W = (X^TX)^{-1}\) since it is equivalent to multiplying 
+  \((X^TX)^{-1}\) by two identity matrices. We can then substitute this into 
+  \((X^TX)^{-1}\) and obtain
+</p>
+
+<p style="text-align:center;">
+  \[
+    W^T(W^T)^{-1}(X^TX)^{-1}W^{-1}W - W^T(X^TX)^{-1}W 
+    = W^T\bigl((W^T)^{-1}(X^TX)^{-1}W^{-1}\bigr)W.
+  \]
+</p>
+
+<p>
+  Since \(W = X^TX(X^TX + \lambda I)^{-1}\) we can determine its inverse and transpose 
+  like so. We know that \(W = AB\) where \(A = X^TX\) and \(B = (X^TX + \lambda I)\), and 
+  that \(W^{-1} = B^{-1}A^{-1}\). Thus
+</p>
+
+<p style="text-align:center;">
+  \[
+    W^{-1} = (X^TX + \lambda I)\,(X^TX)^{-1}.
+  \]
+</p>
+
+<p>
+  And \(W^T = B^T A^T\) which gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    W^T = \bigl((X^TX + \lambda I)^{-1}\bigr)^T (X^TX)^T
+    = (X^TX + \lambda I)^{-1}(X^TX).
+  \]
+</p>
+
+<p>
+  We have 
+  \((W^T)^{-1} = \bigl((X^TX + \lambda I)^{-1}(X^TX)\bigr)^{-1} 
+   = (X^TX)^{-1}(X^TX + \lambda I)\) 
+  as a result. Rewriting our complete expression and substituting these quantities into it 
+  gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\bigl((X^TX)^{-1} - W^T(X^TX)^{-1}W\bigr)
+    = \sigma^2\Bigl(
+        W^T\bigl((W^T)^{-1}(X^TX)^{-1}W^{-1}\bigr)W - W^T(X^TX)^{-1}W
+      \Bigr)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = \sigma^2\,W^T\Bigl(
+        (W^T)^{-1}(X^TX)^{-1}W^{-1} - (X^TX)^{-1}
+      \Bigr)W
+    = \sigma^2\,W^T\Bigl(
+        (X^TX)^{-1}(X^TX + \lambda I)(X^TX)^{-1}(X^TX + \lambda I)(X^TX)^{-1}
+        - (X^TX)^{-1}
+      \Bigr)W.
+  \]
+</p>
+
+<p>
+  Where
+</p>
+
+<p style="text-align:center;">
+  \[
+    (X^TX)^{-1}(X^TX + \lambda I) = I + (X^TX)^{-1}\lambda.
+  \]
+</p>
+
+<p>
+  Giving us
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\,W^T\Bigl(
+      \bigl(I + (X^TX)^{-1}\lambda\bigr)(X^TX)^{-1}
+      \bigl(I + (X^TX)^{-1}\lambda\bigr)
+      - (X^TX)^{-1}
+    \Bigr)W.
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = \sigma^2\,W^T\Bigl(
+      \bigl((X^TX)^{-1} + \lambda (X^TX)^{-2}\bigr)
+      \bigl(I + (X^TX)^{-1}\lambda\bigr)
+      - (X^TX)^{-1}
+    \Bigr)W.
+  \]
+</p>
+
+<p>
+  We now multiply 
+  \(\bigl((X^TX)^{-1} + \lambda(X^TX)^{-2}\bigr)\bigl(I + (X^TX)^{-1}\lambda\bigr)\) 
+  which returns
+</p>
+
+<p style="text-align:center;">
+  \[
+    (X^TX)^{-1}(I) = (X^TX)^{-1}, \quad
+    \lambda(X^TX)^{-2}(I) = \lambda(X^TX)^{-2},
+  \]
+  \[
+    (X^TX)^{-1}\bigl((X^TX)^{-1}\lambda\bigr)
+      = (X^TX)^{-2}\lambda,\quad
+    \lambda(X^TX)^{-2}\bigl((X^TX)^{-1}\lambda\bigr)
+      = \lambda^2(X^TX)^{-3}.
+  \]
+</p>
+
+<p>
+  By the additive property of multiplication of exponents. Our result is
+</p>
+
+<p style="text-align:center;">
+  \[
+    \bigl((X^TX)^{-1} + \lambda(X^TX)^{-2}\bigr)\bigl(I + (X^TX)^{-1}\lambda\bigr)
+    = (X^TX)^{-1} + \lambda(X^TX)^{-2} + (X^TX)^{-2}\lambda + \lambda^2(X^TX)^{-3}
+  \]
+  \[
+    = (X^TX)^{-1} + 2\,(X^TX)^{-2}\lambda + \lambda^2\,(X^TX)^{-3}.
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\,W^T\Bigl(
+      \bigl((X^TX)^{-1} + \lambda(X^TX)^{-2}\bigr)
+      \bigl(I + (X^TX)^{-1}\lambda\bigr) 
+      - (X^TX)^{-1}
+    \Bigr)W
+    = \sigma^2\,W^T\Bigl(
+      (X^TX)^{-1} + 2(X^TX)^{-2}\lambda + \lambda^2(X^TX)^{-3}
+      - (X^TX)^{-1}
+    \Bigr)W
+  \]
+  \[
+    = \sigma^2\,W^T\bigl(2(X^TX)^{-2}\lambda + \lambda^2(X^TX)^{-3}\bigr)W.
+  \]
+</p>
+
+<p>
+  Recalling that \(W = X^TX(X^TX + \lambda I)^{-1}\) and 
+  \(W^T = (X^TX + \lambda I)^{-1}X^TX\), we have
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\,(X^TX + \lambda I)^{-1}X^TX
+    \bigl(2(X^TX)^{-2}\lambda + \lambda^2(X^TX)^{-3}\bigr)
+    X^TX(X^TX + \lambda I)^{-1}.
+  \]
+</p>
+
+<p>
+  Multiplying through by \(X^TX\) gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2\,(X^TX + \lambda I)^{-1}\bigl(2\lambda I + \lambda^2(X^TX)^{-1}\bigr)
+    (X^TX + \lambda I)^{-1}.
+  \]
+</p>
+
+<p>
+  Where for \(\vec{y}^T(X^TX)\vec{y}\), with \(\vec{y}\) some nonzero vector, let 
+  \(\vec{z} = X\vec{y}\) and \(\vec{z}^T = \vec{y}^TX^T\). Then the expression is 
+  equivalently \(\vec{z}^T\vec{z} = ||\vec{z}||^2\), which is always greater than zero. 
+  Therefore, \(X^TX\) is positive definite and for any \(\lambda > 0\), 
+  \((X^TX + \lambda I)\) is also positive definite. Therefore 
+  \((X^TX + \lambda I)\) and its inverse are both positive definite matrices.
+</p>
+
+<p>
+  Now let \(\vec{z} = (X^TX + \lambda I)^{-1}\vec{y}\) and suppose that
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{y}^T\Bigl(Var(\vec{\hat{\beta}}_{OLS}) - Var(\vec{\hat{\beta}}_{RIDGE})\Bigr)\vec{y}
+    = \vec{y}^T\Bigl(
+      \sigma^2(X^TX + \lambda I)^{-1}\bigl(2\lambda I + \lambda^2(X^TX)^{-1}\bigr)
+      (X^TX + \lambda I)^{-1}
+    \Bigr)\vec{y}
+  \]
+  \[
+    = \sigma^2\,\vec{z}^T\bigl(2\lambda I + \lambda^2(X^TX)^{-1}\bigr)\vec{z}
+    = 2\sigma^2\lambda\,\vec{z}^T\vec{z}
+      + \lambda^2\sigma^2\,\vec{z}^T(X^TX)^{-1}\vec{z}.
+  \]
+</p>
+
+<p>
+  Where \(\vec{z}^T\vec{z}\) is greater than \(0\). Since we have demonstrated that 
+  \(X^TX\) is a positive definite matrix, then \(\vec{z}^T(X^TX)^{-1}\vec{z}\) is also 
+  greater than \(0\). Thus the entire expression is greater than \(0\) and
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{y}^T\Bigl(Var(\vec{\hat{\beta}}_{OLS}) - Var(\vec{\hat{\beta}}_{RIDGE})\Bigr)\vec{y}
+    > 0,
+  \]
+</p>
+
+<p>
+  which means that the matrix represented by the difference in the variance matrices for 
+  the OLS and Ridge estimators is a positive definite matrix. Therefore, the Ridge 
+  estimator, for \(\lambda > 0\), always increases the bias and reduces the variance of 
+  the estimated coefficients \(\vec{\hat{\beta}}\) compared to the OLS model.
+</p>
+
+<hr/>
+<p><a href="index.html">Return to Home Page</a></p>
 
 </body>
 </html>
