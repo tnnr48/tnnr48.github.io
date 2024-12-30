@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>KL-divergence</title>
+  <!-- Load MathJax (version 3) from a public CDN -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+  <h2>The KL Divergence</h2>
+
+  <p>
+    Now that we have discussed entropy we cover cross entropy which is given by
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      H(P, Q) = -\sum_{i=1}^n p(x_i)\log(q(x_i))
+    \]
+  </p>
+
+  <p>
+    in the discrete case and by
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      H(P, Q) = -\int_\mathcal{X} p(x)\log(q(x)) \, dx
+    \]
+  </p>
+
+  <p>
+    in the continuous case. Cross entropy can be best understood by considering 
+    our random variable \(X\) with outcomes \(x\). This random variable has a 
+    true probability distribution given by \(P\) which we can visualize by 
+    plotting the probability of each outcome (this will form a smooth curve in 
+    the continuous case). Now suppose we build some model to approximate the 
+    true distribution \(P\) and it returns, in many instances, different 
+    probabilities for each \(x\), then we can denote its distribution as \(Q\). 
+    Approximating the true distribution with a model can then be thought of 
+    approximating it with a distribution \(Q\) and the information returned by 
+    such an approximation is given by the cross entropy. Naturally, since this 
+    approximation tends to be inexact the average surprise will be higher and 
+    our outcomes more informative than with entropy.
+  </p>
+
+  <p>
+    As mentioned, entropy is the average information returned by the outcomes of 
+    \(X\), however we can also think of it as the information needed to describe 
+    the outcomes of \(X\) when approximating \(P\) with itself. That will just 
+    be the entropy of \(P\) since the approximation is exact but this serves as 
+    a useful way to think about cross entropy. We can think of cross entropy as 
+    the additional information needed to describe the observed outcomes when 
+    using a distribution (model) \(Q\) to approximate \(P\), which makes sense 
+    as the approximation will be inexact. This leads to outcomes that are more 
+    surprising and informative, and thus require more information to describe 
+    them.
+  </p>
+
+  <p>
+    With this established we can think about the <strong>Kullback Leibler (KL) 
+    Divergence</strong> which is also known as relative entropy. It is given by
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      H(p, q) - H(p) 
+      = -\int_\mathcal{X} p(x)\log(q(x))\,dx 
+        - -\int_{\mathcal{X}} p(x)\log(p(x))
+    \]
+  </p>
+
+  <p>
+    or the difference between the cross entropy and the entropy. This is 
+    typically expressed in the compact form
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      D_{KL}(p \ || \ q) 
+      = -\sum_{i=1}^n p(x_i)\log(q(x_i)) 
+        - -\sum_{i=1}^{n} p(x_i)\log(p(x_i)) 
+      = \sum_{i=1}^{n} p(x_i)\log \frac{p(x_i)}{q(x_i)}
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      D_{KL}(p \ || \ q) 
+      = \int_{\mathcal{X}} p(x) \log(p(x)) 
+        - \int_\mathcal{X} p(x)\log(q(x))\,dx 
+      = \int_{\mathcal{X}} p(x)\log\Bigl(\frac{p(x)}{q(x)}\Bigr)\,dx
+    \]
+  </p>
+
+  <p>
+    and we call it relative entropy as it is the difference of the average 
+    information returned by approximating \(P\) with \(Q\) and the average 
+    information returned by approximating \(P\) with itself. We can then think 
+    about the KL Divergence as measuring the information excess when using a 
+    model to approximate the outcomes of \(X\). When we use such an 
+    approximation we lose knowledge about the outcomes of \(P\) and need more 
+    information to describe them. This is inefficient and we can think of the KL 
+    Divergence as measuring a kind of 'information waste' between a model and 
+    the true distribution. No information is wasted when the KL Divergence is 0 
+    and the worse the approximation is, the more information will be wasted.
+  </p>
+
+  <p>
+    <a href="index.html">Return to Home Page</a>
+  </p>
+</body>
+</html>
