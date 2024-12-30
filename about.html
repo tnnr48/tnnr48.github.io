@@ -151,6 +151,195 @@
     \]
     We can simplify this like so...
   </p>
+
+  <p>
+    First, consider the integral for the standard normal MGF:
+  </p>
+  
+  <p style="text-align:center;">
+    \[
+      \int_{-\infty}^{\infty} e^{xt} \,\frac{1}{\sqrt{2\pi}}\,e^{-\frac{x^2}{2}}\,dx
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \,
+        e^{\,xt - \tfrac{x^2}{2}} \, dx
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \,
+        e^{-\tfrac{1}{2} \bigl(x^2 - 2xt\bigr)} 
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \,
+        e^{-\tfrac{1}{2}\bigl(x^2 - 2xt + t^2\bigr) 
+           \;+\; \tfrac{1}{2}t^2}
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \,
+        e^{-\tfrac{1}{2}\,(x - t)^2 \;+\; \tfrac{1}{2}t^2}
+    \]
+  </p>
+
+  <p>
+    Since \(e^{\tfrac{1}{2}t^2}\) is a constant (no \(x\) term) we can factor it out:
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      M_Z(t) 
+      = e^{\tfrac{1}{2}t^2} \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \,
+        e^{-\tfrac{1}{2}(x - t)^2} \,dx 
+      = e^{\tfrac{1}{2}t^2} \cdot (1) 
+      = e^{\tfrac{1}{2}t^2}.
+    \]
+  </p>
+
+  <p>
+    Thus \(M_Z(t) = e^{\tfrac{1}{2}t^2}\) is the moment generating function for the 
+    standard normal distribution. The integral evaluates to \(1\) because it’s the 
+    total area under a normal density. To prove the CLT, we must show the MGF for 
+    our standardized sum \(S^*\) converges to \(e^{\tfrac{1}{2}t^2}\).
+  </p>
+
+  <p>
+    Recall some properties of MGFs: if \(A\) and \(B\) are independent random 
+    variables with MGFs \(M_A(t)\) and \(M_B(t)\), then \(C = A + B\) has MGF 
+    \(M_C(t) = M_A(t) \, M_B(t)\). Also, the \(k\)th derivative of an MGF evaluated 
+    at \(t=0\) gives the \(k\)th moment of the distribution.
+  </p>
+
+  <p>
+    Define the standardized sample sum 
+    \[
+      S^* = \frac{S - n\mu}{\sqrt{n}\,\sigma} 
+      = \frac{\sum_{i=1}^n X_i - n\mu}{\sqrt{n}\,\sigma}.
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      S^* 
+      = \frac{\bigl(X_1 + X_2 + \dots + X_n\bigr) - n\mu}{\sqrt{n}\,\sigma}
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = \frac{(X_1 - \mu) + (X_2 - \mu) + \dots + (X_n - \mu)}{\sqrt{n}\,\sigma}
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = \frac{X_1 - \mu}{\sqrt{n}\,\sigma}
+        + \frac{X_2 - \mu}{\sqrt{n}\,\sigma}
+        + \dots 
+        + \frac{X_n - \mu}{\sqrt{n}\,\sigma}.
+    \]
+  </p>
+
+  <p>
+    Its MGF is 
+    \(\displaystyle M_{S^*}(t) = E\!\bigl[e^{\,t\,S^*}\bigr]\), and by factoring 
+    out each exponent term,
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      E\bigl[e^{t \, S^*}\bigr]
+      = E\!\Bigl[e^{\,t\,\bigl(\frac{X_1-\mu}{\sqrt{n}\sigma} 
+                            + \cdots + 
+                            \frac{X_n-\mu}{\sqrt{n}\sigma}\bigr)}\Bigr] 
+      = \bigl(E[e^{\,t\,(\frac{X_i-\mu}{\sqrt{n}\sigma})}]\bigr)^n.
+    \]
+  </p>
+
+  <p>
+    Each factor 
+    \(E[e^{\,t\,(\tfrac{X_i-\mu}{\sqrt{n}\sigma})}]\) is an MGF of the 
+    standardized variable \(\tfrac{X_i - \mu}{\sqrt{n}\sigma}\).  
+    By properties of MGFs (scaling by a constant), we can write:
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      M_{S^*}(t) 
+      = \Bigl(M_{(X_i - \mu)}\bigl(\tfrac{t}{\sqrt{n}\sigma}\bigr)\Bigr)^n.
+    \]
+  </p>
+
+  <p>
+    Next, we expand \(M_{(X_i - \mu)}\bigl(\tfrac{t}{\sqrt{n}\sigma}\bigr)\) 
+    in a Taylor series (keeping only up to the quadratic term):
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      M_{(X_i - \mu)}\bigl(\tfrac{t}{\sqrt{n}\sigma}\bigr)
+      \approx E\bigl[\,1 
+        + \bigl(\tfrac{t}{\sqrt{n}\sigma}\bigr)(X - \mu)
+        + \bigl(\tfrac{t^2}{2n\sigma^2}\bigr)(X - \mu)^2
+        + \dots \bigr].
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = 1 
+        + \bigl(\tfrac{t}{\sqrt{n}\sigma}\bigr)\bigl(E[X] - \mu\bigr)
+        + \bigl(\tfrac{t^2}{2n\sigma^2}\bigr)\mathrm{Var}(X).
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = 1 
+        + \frac{t}{\sqrt{n}\sigma}(\mu - \mu) 
+        + \frac{t^2}{2n\sigma^2}\,\sigma^2
+      = 1 + \frac{t^2}{2n}.
+    \]
+  </p>
+
+  <p>
+    Therefore,
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      M_{S^*}(t) 
+      = \Bigl(1 + \frac{t^2}{2n}\Bigr)^n.
+    \]
+  </p>
+
+  <p>
+    Recognizing the classic limit \(\lim_{n \to \infty} \bigl(1 + \frac{x}{n}\bigr)^n = e^x\), 
+    we see:
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      \lim_{n \to \infty} M_{S^*}(t) 
+      = \lim_{n \to \infty} \Bigl(1 + \frac{t^2}{2n}\Bigr)^n 
+      = e^{\tfrac{t^2}{2}}
+      = M_Z(t).
+    \]
+  </p>
+
+  <p>
+    Hence, the MGF of the standardized sum converges to the MGF of the standard 
+    normal distribution, completing the proof of the Central Limit Theorem.
+  </p>
   
   <p>
   
