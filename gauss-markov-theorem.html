@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Gauss-Markov Theorem</title>
+  <!-- Load MathJax (version 3) from a public CDN -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<h2>The Gauss-Markov Theorem</h2>
+
+<p>
+  Suppose that we have an unobservable population with observations \(y_i\) with a 
+  true unknown linear model that is the best possible fit to this data, 
+  \(y_i = X\vec{\beta} + \vec{\epsilon}\), where \(\vec{\epsilon}\) is the vector 
+  of errors. When these errors have an average value of \(0\), given by 
+  \(E[\vec{\epsilon}] = 0\), constant variance \(Var(\vec{\epsilon}) = \sigma^2\), 
+  and are uncorrelated \(Cov(\epsilon_i, \epsilon_j) = 0\) for all \(i \neq j\) 
+  (as correlation depends on covariance) the Gauss Markov theorem states that the 
+  OLS estimators are the best unbiased linear estimators (BLUE). In other words, 
+  it is only among unbiased linear models that OLS is the best under such 
+  assumptions, not all models in general. We now proceed to prove the Gauss Markov 
+  theorem below.
+</p>
+
+<p>
+  We know that the least squares estimate of our coefficients is given by 
+  \(\vec{\hat{\beta}} = (X^TX)^{-1}X^T\vec{y}\) where \((X^TX)^{-1}X^T\) is the 
+  \(n\) by \(k\) projection or hat matrix. Suppose we have a slightly different 
+  projection \((X^TX)^{-1}X^T + D\) where \(D\) is some \(n\) by \(k\) matrix 
+  that we can label as a constant matrix \(C\) with estimates 
+  \(\vec{\hat{\beta}}^* = C\vec{y}\). Is this an unbiased estimator of the true 
+  unknown regression coefficients \(\vec{\beta}\)? To determine this we need to 
+  take the expected value to see whether, on average, we are over or under 
+  estimating the true coefficients.
+</p>
+
+<p style="text-align:center;">
+  \[
+    E[\vec{\hat{\beta}}^*] = E[C\vec{y}]
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = E\bigl[((X^TX)^{-1}X^T + D)(X\vec{\beta} + \vec{\epsilon})\bigr]
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = E\bigl[((X^TX)^{-1}X^T + D)(X\vec{\beta}) 
+      + ((X^TX)^{-1}X^T + D)\vec{\epsilon}\bigr]
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = ((X^TX)^{-1}X^T + D)(X\vec{\beta}) 
+      + ((X^TX)^{-1}X^T + D)E[\vec{\epsilon}]
+  \]
+</p>
+
+<p>
+  as these are a bunch of constant matrices and the average of constants is the 
+  constants themselves. Since \(E[\vec{\epsilon}] = 0\) in our assumptions then 
+  the entire term multiplied to it disappears. We have
+</p>
+
+<p style="text-align:center;">
+  \[
+    ((X^TX)^{-1}X^T + D)(X\vec{\beta})
+    = ((X^TX)^{-1}X^T)(X\vec{\beta}) + DX\vec{\beta}
+    = (X^TX)^{-1}X^TX\vec{\beta} + DX\vec{\beta}
+    = I\vec{\beta} + DX\vec{\beta}
+    = \vec{\beta} + DX\vec{\beta}.
+  \]
+</p>
+
+<p>
+  and so our estimator \(\vec{\hat{\beta}}^*\) is unbiased when \(DX = 0\). 
+  We now examine the variance of this estimator
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var(\vec{\hat{\beta}}^*) = Var(C\vec{y}) = C\,Var(\vec{y})\,C^T = C\,\sigma^2\,C^T.
+  \]
+</p>
+
+<p>
+  by the properties of matrix vector operations. This can be decomposed into
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sigma^2 \bigl((X^TX)^{-1}X^T + D\bigl)
+    \bigl((X^TX)^{-1}X^T + D\bigr)^T
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = \sigma^2\bigl((X^TX)^{-1}X^T + D\bigr)\bigl(X(X^TX)^{-1} + D^T\bigr)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = \sigma^2\Bigl(
+       (X^TX)^{-1}X^TX(X^TX)^{-1}
+       + (X^TX)^{-1}X^T D^T + D\,X\,(X^TX)^{-1} + D\,D^T
+      \Bigr)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = \sigma^2 (X^TX)^{-1}
+      + \sigma^2(X^TX)^{-1}(DX)^T
+      + \sigma^2 D X (X^TX)^{-1}
+      + \sigma^2 D D^T
+  \]
+</p>
+
+<p>
+  and since our estimator is only unbiased if \(DX = 0\) then the variance of our 
+  unbiased linear estimator is 
+  \(\sigma^2(X^TX)^{-1} + \sigma^2 D D^T\). Recall that the variance of the OLS 
+  estimator is 
+  \(Var(\vec{\hat{\beta}}) = \sigma^2 (X^TX)^{-1}\) and this reduces to
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var(\vec{\hat{\beta}}^*) = Var(\vec{\hat{\beta}}) + \sigma^2 D D^T.
+  \]
+</p>
+
+<p>
+  So the variance of any other linear unbiased estimator must be at least that of 
+  the OLS estimator and cannot be any lesser. That is, \(D D^T\) is a positive 
+  semi-definite matrix, the multivariate analog to a nonnegative number. 
+  Why is \(D D^T\) such a matrix? Consider some \(\vec{x}\) and 
+  \(\vec{x}^T D D^T \vec{x} = (D^T \vec{x})(D^T \vec{x})\) where \(D^T \vec{x}\) 
+  produces a vector so this result is really the square of that vector, which is 
+  equal to the squared length of \(D^T \vec{x}\) given by 
+  \(\|D^T\vec{x}\|^2\). Naturally, this is always nonnegative and thus 
+  \(\vec{x}^T D D^T \vec{x} = \|D^T\vec{x}\|^2 \geq 0\), which means \(D D^T\) is 
+  a positive semi-definite matrix. Thus, the variance of any other unbiased linear 
+  estimator is greater than or equal to that of the OLS estimator under the 
+  assumptions of the Gauss Markov theorem.
+</p>
+
+<hr/>
+<p><a href="index.html">Return to Home Page</a></p>
+
+</body>
+</html>
