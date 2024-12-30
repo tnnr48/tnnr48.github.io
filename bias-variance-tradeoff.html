@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>bias-variance-tradeoff</title>
+  <!-- Load MathJax (version 3) from a public CDN -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<h2>Bias-Variance Tradeoff</h2>
+
+<p>
+  Finally we discuss and derive the bias variance tradeoff, one of the fundamental ideas 
+  in statistics, which we first derive in the single variable case and then in the 
+  multivariable. We know that the mean squared error (MSE) is essentially the average sum 
+  of squares as given by 
+  \(\frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y_i})\), 
+  however we can also apply this to some estimated coefficient \(\hat{\theta}\) and the 
+  true unknown coefficient \(\theta\). The MSE of coefficient estimates is given by
+</p>
+
+<p style="text-align:center;">
+  \[
+    E[(\hat{\theta} - \theta)^2]
+  \]
+</p>
+
+<p>
+  note that this is not the same as variance, which is given by the similar formula 
+  \(E[(\hat{\theta} - \bar{\theta})^2]\) where \(\bar{\theta}\) is the average parameter 
+  value. However, there should clearly be some relation between the MSE of coefficients 
+  and the variance of them, which we will demonstrate here. First, we can add \(0\) to 
+  our expression in the form of \(E[\hat{\theta}] - E[\hat{\theta}]\) and rewrite
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\bigl[(\hat{\theta} - E[\hat{\theta}] + E[\hat{\theta}] - \theta)^2\bigr].
+  \]
+</p>
+
+<p>
+  Now let \(a = \hat{\theta} - E[\hat{\theta}]\) and \(b = E[\hat{\theta}] - \theta\). 
+  This will allow us to rewrite and square the expression as we now have
+</p>
+
+<p style="text-align:center;">
+  \[
+    E[(a + b)^2]
+    = E[a^2 + 2ab + b^2]
+    = E\bigl[(\hat{\theta} - E[\hat{\theta}])^2 
+      + 2(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta) 
+      + (E[\hat{\theta}] - \theta)^2\bigr].
+  \]
+</p>
+
+<p>
+  which we can break up into the following terms
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\bigl[(\hat{\theta} - E[\hat{\theta}])^2\bigr] 
+    + E\Bigl[2\,(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta)\Bigr]
+    + E\bigl[(E[\hat{\theta}] - \theta)^2\bigr].
+  \]
+</p>
+
+<p>
+  where the first term is \(Var(\hat{\theta})\). The second is
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\Bigl[2\,(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta)\Bigr]
+    = 2\,E\Bigl[(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta)\Bigr]
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = 2\,(E[\hat{\theta}] - E[\hat{\theta}])\,E\bigl[E[\hat{\theta}] - \theta\bigr]
+    = 0\,\bigl(E[E[\hat{\theta}] - \theta]\bigr)
+    = 0
+  \]
+</p>
+
+<p>
+  and the third term \(E\bigl[(E[\hat{\theta}] - \theta)^2\bigr]\) is the squared difference 
+  between \(\hat{\theta}\) and \(\theta\) on average which is the squared bias. Thus we 
+  may write the MSE as
+</p>
+
+<p style="text-align:center;">
+  \[
+    MSE = Var(\hat{\theta}) + (Bias(\hat{\theta},\theta))^2.
+  \]
+</p>
+
+<p>
+  Now we consider the general case where we have a set of estimated and a set of true 
+  unknown parameters \(\hat{\theta}\) and \(\theta\) respectively. Then the MSE is given 
+  by the Euclidean distance
+</p>
+
+<p style="text-align:center;">
+  \[
+    MSE(\vec{\hat{\theta}}) 
+    = E\bigl[\|\vec{\hat{\theta}} - \vec{\theta}\|\bigr] 
+    = E\bigl[\sqrt{(\vec{\hat{\theta}} - \vec{\theta})}^2\bigr]
+  \]
+</p>
+
+<p>
+  which is the same as
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\bigl[(\vec{\hat{\theta}} - \vec{\theta})^T(\vec{\hat{\theta}} - \vec{\theta})\bigr].
+  \]
+</p>
+
+<p>
+  We can do some rewriting by adding in a multiple of zero, 
+  \(-E[\vec{\hat{\theta}}] + E[\vec{\hat{\theta}}]\) into our expression
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\bigl[(\vec{\hat{\theta}} - E[\vec{\hat{\theta}}] 
+      + E[\vec{\hat{\theta}}] - \vec{\theta})^T
+      (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}] 
+      + E[\vec{\hat{\theta}}] - \vec{\theta})\bigr]
+  \]
+</p>
+
+<p>
+  where we let \(a = \vec{\hat{\theta}} - E[\vec{\hat{\theta}}]\) and 
+  \(b = E[\vec{\hat{\theta}}] - \vec{\theta}\) so our expression now is
+</p>
+
+<p style="text-align:center;">
+  \[
+    E[(a + b)^T(a + b)].
+  \]
+</p>
+
+<p>
+  and 
+</p>
+
+<p style="text-align:center;">
+  \[
+    a^2 = (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+          (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}]),
+    \quad
+    ab = (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+         (E[\vec{\hat{\theta}}] - \vec{\theta}),
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    ba = (E[\vec{\hat{\theta}}] - \vec{\theta})^T
+         (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}]),
+    \quad
+    b^2 = (E[\vec{\hat{\theta}}] - \vec{\theta})^T
+          (E[\vec{\hat{\theta}}] - \vec{\theta}).
+  \]
+</p>
+
+<p>
+  We can expand our expectation as
+</p>
+
+<p style="text-align:center;">
+  \[
+    E[a^2 + ab + ba + b^2]
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = E\Bigl[
+        (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+        (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])
+        + (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+          (E[\vec{\hat{\theta}}] - \vec{\theta})
+        + (E[\vec{\hat{\theta}}] - \vec{\theta})^T
+          (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])
+        + (E[\vec{\hat{\theta}}] - \vec{\theta})^T
+          (E[\vec{\hat{\theta}}] - \vec{\theta})
+      \Bigr]
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = E\bigl[
+        (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+        (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])
+      \bigr]
+    + E\bigl[
+        (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+        (E[\vec{\hat{\theta}}] - \vec{\theta})
+      \bigr]
+    + E\bigl[
+        (E[\vec{\hat{\theta}}] - \vec{\theta})^T
+        (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])
+      \bigr]
+    + E\bigl[
+        (E[\vec{\hat{\theta}}] - \vec{\theta})^T
+        (E[\vec{\hat{\theta}}] - \vec{\theta})
+      \bigr].
+  \]
+</p>
+
+<p>
+  The first expression equals itself since both terms are random quantities, the second
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\bigl[(\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+    (E[\vec{\hat{\theta}}] - \vec{\theta})\bigr]
+    = E\bigl[(\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T\bigr]\,
+      E\bigl[(E[\vec{\hat{\theta}}] - \vec{\theta})\bigr]
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = E\bigl[(\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T\bigr]
+      (E[\vec{\hat{\theta}}] - E[\vec{\theta}])
+    = (E[\vec{\hat{\theta}}] - E[\vec{\hat{\theta}}])^T
+      (E[\vec{\hat{\theta}}] - \vec{\theta})
+    = 0\,(E[\vec{\hat{\theta}}] - \vec{\theta}) 
+    = 0
+  \]
+</p>
+
+<p>
+  so the second term is \(0\). Similarly, the third term is also \(0\) as it contains 
+  \(E\bigl[(\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T\bigr]\) in the product which 
+  we have just shown is equal to \(0\). Then our entire expression becomes much simpler, 
+  consisting of the first and last terms
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\Bigl[
+      (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])^T
+      (\vec{\hat{\theta}} - E[\vec{\hat{\theta}}])
+    \Bigr]
+    + 
+    (E[\vec{\hat{\theta}}] - \vec{\theta})^T
+    (E[\vec{\hat{\theta}}] - \vec{\theta}).
+  \]
+</p>
+
+<p>
+  where the latter term is the squared bias. Since the first term is the average of a 
+  vector product we can write it as a summation
+</p>
+
+<p style="text-align:center;">
+  \[
+    E\bigl[\sum_{i=1}^{n} (\hat{\theta}_i - E[\hat{\theta}_i])^2\bigr]
+    = \sum_{i=1}^{n}E[(\hat{\theta}_i - E[\hat{\theta}_i])^2]
+    = Var(\hat{\theta}_i)
+  \]
+</p>
+
+<p>
+  or the variance of the \(i^{th}\) estimated coefficient, and we may rewrite the second 
+  term as 
+</p>
+
+<p style="text-align:center;">
+  \[
+    (\sqrt{Bias(\vec{\hat{\theta}})^T \,Bias(\vec{\hat{\theta}})})^2
+    = \bigl\|\!Bias(\vec{\hat{\theta}})\bigr\|^2
+  \]
+</p>
+
+<p>
+  and the sum of the individual variances is equal to the sum of the diagonal elements of 
+  the covariance matrix of \(\vec{\hat{\theta}}\) which gives our final result
+</p>
+
+<p style="text-align:center;">
+  \[
+    MSE(\vec{\hat{\theta}}) 
+    = tr\bigl(Var(\vec{\hat{\theta}})\bigr) 
+      + \|\!Bias(\vec{\hat{\theta}})\bigr\|^2
+  \]
+</p>
+
+<p>
+  which completes our derivation of the bias variance trade off. We now briefly discuss 
+  its application to Ridge regression. Under the typical assumption of mean \(0\) error 
+  the OLS coefficient estimates are unbiased, thus its MSE is equal to 
+  \(tr\bigl(Var(\vec{\hat{\beta}})\bigr) + 0  
+   = tr\bigl(Var(\vec{\hat{\beta}})\bigr)\)
+  where the MSE of the biased ridge estimate is
+</p>
+
+<p style="text-align:center;">
+  \[
+    tr\bigl(Var(\vec{\hat{\beta}}_{RIDGE})\bigr)
+    + \|\!Bias(\vec{\hat{\beta}}_{RIDGE})\bigr\|^2.
+  \]
+</p>
+
+<p>
+  The difference of the MSE's is
+</p>
+
+<p style="text-align:center;">
+  \[
+    tr\bigl(Var(\vec{\hat{\beta}})\bigr)
+    - \Bigl(tr\bigl(Var(\vec{\hat{\beta}}_{RIDGE})\bigr)
+    + \|\!Bias(\vec{\hat{\beta}}_{RIDGE})\bigr\|^2\Bigr)
+  \]
+</p>
+
+<p>
+  and since we have shown that the difference matrix here is positive definite then its 
+  trace is always positive, and the square of the bias norm must also be positive. 
+  Therefore we have the difference of two positive quantities meaning our result could be 
+  positive or negative. As mentioned earlier, it is always possible to find some \(\lambda\) 
+  such that the ridge estimate has a lower MSE in its coefficient estimates than an 
+  unbiased estimate, giving us a positive result in the difference. Determining such a 
+  \(\lambda\) is typically accomplished through cross validation.
+</p>
+
+<hr/>
+<p><a href="index.html">Return to Home Page</a></p>
+
+</body>
+</html>
