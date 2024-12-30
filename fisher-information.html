@@ -53,6 +53,164 @@
     \]
   </p>
 
+   <p>
+    which by the properties of logarithm derivatives gives
+  </p>
+
+  <!-- Centered equation block 1 -->
+  <p style="text-align:center;">
+    \[
+      (\int \frac{1}{f(x|\theta}\nabla_{\theta}f(x|\theta)f(x|\theta)dx)^2 
+      = (\int \nabla f(x|\theta)dx)^2 
+      = (\nabla_{\theta} \int f(x|\theta)dx)^2 
+      = (\nabla_{\theta} 1)^2 
+      = 0
+    \]
+  </p>
+
+  <p>
+    Then the Fisher matrix is given by 
+    \(E[s(\theta|x)^2] - (E[s(\theta|x)])^2 = E[s(\theta|x)^2]\)
+  </p>
+
+  <p>
+    Now, we want to demonstrate why the Fisher matrix may be written as the negative average of the second derivative
+  </p>
+
+  <!-- Centered equation block 2 -->
+  <p style="text-align:center;">
+    \[
+      \nabla_{\theta}(s(\theta|x)) 
+      = \nabla_{\theta}(\nabla_{\theta}(\log f(\theta|x))) 
+      = \nabla_{\theta}\bigl(\frac{\nabla_{\theta} f(\theta|x)}{f(\theta|x)}\bigr)
+    \]
+  </p>
+
+  <p>
+    since we are taking the derivative of a logarithm. Because we now have the derivative of a quotient we may apply the quotient rule to obtain
+  </p>
+
+  <!-- Centered equation block 3 -->
+  <p style="text-align:center;">
+    \[
+      \frac{f(\theta|x)\nabla_{\theta}^2(f(\theta|x)) - \nabla_{\theta}(f(\theta|x))\nabla_{\theta}(f(\theta|x))}{(f(\theta|x))^2}
+    \]
+  </p>
+
+  <!-- Centered equation block 4 -->
+  <p style="text-align:center;">
+    \[
+      = \frac{\nabla_{\theta}^2(f(\theta|x))}{(f(\theta|x))} 
+        - \frac{(\nabla_{\theta}(f(\theta|x))\nabla_{\theta}(f(\theta|x))}{(f(\theta|x))^2}
+    \]
+  </p>
+
+  <!-- Centered equation block 5 -->
+  <p style="text-align:center;">
+    \[
+      = \frac{\nabla_{\theta}^2(f(\theta|x))}{(f(\theta|x))} 
+        - (\nabla_{\theta}\log(f(\theta|x)))\nabla_{\theta}\log(f(\theta|x))
+    \]
+  </p>
+
+  <p>
+    by the derivative of logarithms. Also recall that the score \(s(\theta|x) = \frac{\partial \log L(\theta|x)}{\partial \theta}\) or \(\nabla_{\theta}\log L(\theta|x)\) in the multivariate case, which gives us
+  </p>
+
+  <!-- Centered equation block 6 -->
+  <p style="text-align:center;">
+    \[
+      \frac{\nabla_{\theta}^2(f(\theta|x))}{(f(\theta|x))} 
+      - (s(\theta|x))^2
+    \]
+  </p>
+
+  <p>
+    and
+  </p>
+
+  <!-- Centered equation block 7 -->
+  <p style="text-align:center;">
+    \[
+      E[\frac{\nabla_{\theta}^2(L(\theta|x))}{(L(\theta|x))}]
+    \]
+  </p>
+
+  <!-- Centered equation block 8 -->
+  <p style="text-align:center;">
+    \[
+      = \int \frac{\nabla_{\theta}^2(f(\theta|x))}{f(\theta|x)} f(\theta|x)dx
+    \]
+  </p>
+
+  <!-- Centered equation block 9 -->
+  <p style="text-align:center;">
+    \[
+      = \int \nabla_{\theta}^2 f(\theta|x) dx 
+      = \nabla_{\theta}^2 \int f(\theta|x) dx
+    \]
+  </p>
+
+  <!-- Centered equation block 10 -->
+  <p style="text-align:center;">
+    \[
+      = \nabla_{\theta}^2 \int f(x|\theta) dx 
+      = \nabla_{\theta}^2 1 
+      = 0
+    \]
+  </p>
+
+  <p>
+    then we have
+  </p>
+
+  <!-- Centered equation block 11 -->
+  <p style="text-align:center;">
+    \[
+      E[\nabla_{\theta}^2 \log(f(\theta|x))] 
+      = E[\frac{\nabla_{\theta}^2(f(\theta|x))}{(f(\theta|x))} - (s(\theta|x))^2]
+    \]
+  </p>
+
+  <!-- Centered equation block 12 -->
+  <p style="text-align:center;">
+    \[
+      = 0 - E[(s(\theta|x))^2]
+    \]
+  </p>
+
+  <!-- Centered equation block 13 -->
+  <p style="text-align:center;">
+    \[
+      = -\mathcal{I}(\theta)
+    \]
+  </p>
+
+  <p>
+    thus
+  </p>
+
+  <!-- Centered equation block 14 -->
+  <p style="text-align:center;">
+    \[
+      \mathcal{I}(\theta) 
+      = -E[\nabla_{\theta}^2 \log(L(\theta|x))]
+    \]
+  </p>
+
+  <!-- Centered equation block 15 -->
+  <p style="text-align:center;">
+    \[
+      = -H(x|\theta)
+    \]
+  </p>
+
+  <p>
+    where \(H(x|\theta)\) denotes the Hessian matrix, which is a square, symmetric 
+    matrix every element of which is the second gradient of the log likelihood 
+    function.
+  </p>
+
   <p>
     <!-- Link back to home page (optional) -->
     <a href="index.html">Return to Home Page</a>
