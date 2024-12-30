@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>cramer-rao-lower-bound</title>
+  <!-- Load MathJax (version 3) from a public CDN -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<h2>The Cramer Rao Lower Bound</h2>
+
+<p>
+  A more general statement about linear models can be made by maximum likelihood 
+  estimation, which is that if the linear model is MLE then its coefficients are 
+  the best unbiased estimators. That is, the linear constraint is removed and MLE 
+  produces the best unbiased model overall. The validity of this statement is 
+  rooted in MLE theory, particularly in demonstrating that MLE reaches the 
+  <strong>Cramer Rao Lower Bound</strong> (CRLB). The CRLB states that the variance 
+  of any unbiased estimator is no less than 
+  \(\frac{1}{nI(\theta)}\) or \(n\) times one over the Fisher information. Thus when 
+  an estimator reaches the CRLB, it has the least variance and is the best of any 
+  unbiased estimator. We will derive the CRLB and demonstrate why estimators produced 
+  by MLE satisfies it, but to do so requires defining some terminology that will be 
+  used here.
+</p>
+
+<p>
+  We say that an estimator \(\hat{\theta}\) is <strong>consistent</strong> if it converges 
+  to \(\theta_0\) in probability as \(n \xrightarrow{} \infty\) where \(\theta_0\) 
+  is the true unknown parameter of the population distribution where 
+  \(\hat{\theta}\) is generated from a sample. Further, we know that a quantity or 
+  estimator is asymptotically normal if its sampling distribution converges to a normal 
+  distribution as established by the CLT. With these ideas established we are going 
+  to set up our problem and prove its solution.
+</p>
+
+<p>
+  We know that when we have a finite sample of data that the likelihood is given by 
+  \(\prod_{i=1}^{n} f(x_i|\theta)\) where we hold the data constant and vary \(\theta\). 
+  The log likelihood is then given by 
+  \(\sum_{i=1}^{n} \log f(x_i|\theta)\) and the value that maximizes this quantity 
+  also maximizes \(\frac{1}{n} \sum_{i=1}^{n} \log f(x_i|\theta)\) since all we have 
+  done is multiply by a constant \(\frac{1}{n}\). In this case, we obtain the sample 
+  average (\(n\) data points in the sample) log likelihood which we will denote as 
+  \(L_n(\theta)\). This likelihood function is maximized by \(\hat{\theta}\), which is 
+  the maximum likelihood estimate obtained from the data sample. Now, if we have access 
+  to our entire population then the log likelihood is equal to \(\log f(x|\theta)\) 
+  with average \(\int \log f(x|\theta) f(x|\theta_0) dx\). That is, we average by 
+  multiplying by the density function of \(\theta_0\), since we define \(\theta_0\) as 
+  the true unknown parameter that generates the true population distribution. Furthermore, 
+  by the LLN, for any \(\theta\)
+</p>
+
+<p style="text-align:center;">
+  \[
+    L_n(\theta) \xrightarrow{} E_{\theta}[L(x|\theta)] = L(\theta)
+  \]
+</p>
+
+<p>
+  which makes sense as when \(n\) is big enough then we are averaging with respect to 
+  the entire population. We also have that, for any \(\theta\), that 
+  \(L(\theta) \leq L(\theta_0)\), which means that \(\theta_0\) and only \(\theta_0\) 
+  maximizes \(L(\theta)\). Next we wish to demonstrate asymptotic normality of the MLE. 
+  Recall that the Fisher information 
+  \(E\bigl[\bigl(\tfrac{\partial}{\partial \theta} \log f(x|\theta)\bigr)^2\bigl]\) 
+  is the variance of the score at the true unknown parameter and is also equal to 
+  \(-E\bigl[\tfrac{\partial^2}{\partial \theta^2} \log f(x|\theta)\bigr]\) and we 
+  denote it as \(I(\theta)\). With these pieces of information established we now want 
+  to prove that
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sqrt{n}\bigl(\hat{\theta} - \theta_0\bigr) 
+    \xrightarrow{} \mathcal{N}\Bigl(0, \tfrac{1}{I(\theta_0)}\Bigr)
+  \]
+</p>
+
+<p>
+  which is the asymptotic normality of the MLE. Once we have proven this then we may 
+  derive the CRLB as desired.
+</p>
+
+<p>
+  We know that the MLE maximizes 
+  \(\tfrac{1}{n} \sum_{i=1}^{n} \log f(x_i|\theta)\) and so its derivative at 
+  \(\hat{\theta}\) is \(0\), \(L'_n(\hat{\theta}) = 0\). Recall the 
+  <strong>mean value theorem</strong> which states that
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{f(a) - f(b)}{a - b} = f'(c)
+  \]
+</p>
+
+<p>
+  where \(c\) is some point in the interval \([a,b]\). This theorem means that there is 
+  a point \(c\) in this interval such that the derivative evaluated at this point is 
+  equal to the slope between \(a\) and \(b\). The mean value theorem is useful to 
+  deriving the asymptotic normality of the MLE as it allows us to set up our problem 
+  in a way such that the CLT will apply immediately. This will become clear as we 
+  proceed through the derivation. Let \(a = \hat{\theta}, b = \theta_0\) and 
+  \(f(\theta) = L'_n(\theta)\), which means that 
+  \(f(a) = L'_n(\hat{\theta}), f(b) = L'_n(\theta_0)\) and 
+  \(f'(c) = L''_n(\theta)\) where \(\theta\) is some point \(c\) in the interval 
+  \([\hat{\theta}, \theta_0]\). By the mean value theorem we have
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{L'_n(\hat{\theta}) - L'_n(\theta_0)}{\hat{\theta} - \theta_0}
+    = L''_n(\theta)
+  \]
+</p>
+
+<p>
+  which we may rewrite as
+</p>
+
+<p style="text-align:center;">
+  \[
+    L'_n(\hat{\theta}) - L'_n(\theta_0)
+    = (\hat{\theta} - \theta_0)L''_n(\theta)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    L'_n(\hat{\theta}) 
+    = (\hat{\theta} - \theta_0)L''_n(\theta) + L'_n(\theta_0)
+  \]
+</p>
+
+<p>
+  and since \(L'_n(\hat{\theta}) = 0\) then the entire expression is equal to \(0\)
+</p>
+
+<p style="text-align:center;">
+  \[
+    (\hat{\theta} - \theta_0)L''_n(\theta) + L'_n(\theta_0) = 0
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    (\hat{\theta} - \theta_0)L''_n(\theta) = -\,L'_n(\theta_0)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{-\,L'_n(\theta_0)}{L''_n(\theta)} = \hat{\theta} - \theta_0
+  \]
+</p>
+
+<p>
+  multiplying each side by \(\sqrt{n}\), which does not change our expression, returns
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{-\,\sqrt{n}L'_n(\theta_0)}{L''_n(\theta)} 
+    = \sqrt{n}(\hat{\theta} - \theta_0)
+  \]
+</p>
+
+<p>
+  we also know that \(\theta_0\) maximizes \(L(\theta)\) which means this quantity and 
+  its expectation are \(0\) in the derivative. Now our numerator is 
+  \(\sqrt{n}L'_n(\theta_0)\) which we may rewrite as
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sqrt{n}L'_n(\theta_0) - 0
+    = \sqrt{n}L'_n(\theta_0) - \sqrt{n}L'(\theta_0)
+    = \sqrt{n}\bigl(L'_n(\theta_0) - L'(\theta_0)\bigr)
+  \]
+</p>
+
+<p>
+  by the CLT this expression, which is a random variable, converges to a normal 
+  distribution. Let \(l'(x_i|\theta_0)\) denote the derivative of the sample log 
+  likelihood for \(\theta_0\) and \(l'(x|\theta_0)\) denote the same for the 
+  population. Then
+</p>
+
+<p style="text-align:center;">
+  \[
+    \sqrt{n}\Bigl(\tfrac{1}{n}\sum_{i=1}^{n} l'(x_i|\theta_0) 
+      - E_{\theta_0}[\,l'(x|\theta_0)\bigr)\Bigr]
+    \xrightarrow{d} \mathcal{N}\Bigl(0, Var_{\theta_0}\bigl(l'(x|\theta_0)\bigr)\Bigr)
+  \]
+</p>
+
+<p>
+  where the variance is calculated by taking the expectation with respect to the 
+  distribution generated by \(\theta_0\), the true distribution. This is done because 
+  our sample size is increasingly large under the conditions of the CLT, which becomes 
+  equivalent to the population. Therefore we take the variance with respect to the 
+  true distribution generated by \(\theta_0\).
+</p>
+
+<p>
+  Now in our denominator we have \(L''_n(\theta)\) which, for a big enough sample 
+  size \(n\), \(L''_n(\theta) \xrightarrow{} E_{\theta_0}[\,l''(x|\theta_0)\bigr]\) 
+  by the LLN and the consistency of estimators. This expression is equal to the 
+  population average of the second derivative of the log likelihood function 
+  evaluated at the true unknown parameter value. That is, our denominator is the 
+  negative Fisher information \(-\,I(\theta_0)\). Rewriting our full expression we have
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{-\,\sqrt{n}L'_n(\theta_0)}{L''_n(\theta)} 
+    \xrightarrow{d} \mathcal{N}\Bigl(0, 
+      \frac{Var_{\theta_0}(\,l'(x|\theta_0)\bigr)}{I(\theta_0)}
+    \Bigr)
+  \]
+</p>
+
+<p>
+  where \(Var_{\theta_0}(l'(x|\theta_0)) 
+  = E_{\theta_0}\bigl[(l'(x|\theta_0))^2\bigr] 
+    - E_{\theta_0}\bigl[l'(x|\theta_0)\bigr]^2\) where the first term is the Fisher 
+  information and the second is the square of the score evaluated at the true 
+  unknown parameter \(\theta_0\), giving us \(0\). Thus, our entire quantity has 
+  distribution
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{-\,\sqrt{n}L'_n(\theta_0)}{L''_n(\theta)} 
+    = \sqrt{n}(\hat{\theta} - \theta_0) 
+    \xrightarrow{d} \mathcal{N}\Bigl(0, \frac{1}{I(\theta)}\Bigr)
+  \]
+</p>
+
+<p>
+  proving that our maximum likelihood estimator \(\hat{\theta}\) is asymptotically 
+  normally distributed. We can determine the exact distribution of \(\hat{\theta}\) 
+  by rewriting our expression. Recall that \(Var(cZ) = c^2 E\bigl[(Z - E[Z])^2\bigr]\) 
+  where \(c\) is a constant and \(Z\) is a random variable. Then
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var\Bigl(\tfrac{1}{\sqrt{n}}\bigl(\sqrt{n}(\hat{\theta} - \theta_0 + \theta_0)\bigr)
+    = \frac{1}{n}Var\bigl(\sqrt{n}(\hat{\theta})\bigr)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = \frac{1}{nI(\theta_0)}
+  \]
+</p>
+
+<p>
+  which means that an MLE estimate achieves the CRLB and has the least variance for 
+  any unbiased estimator. We now seek to prove the CRLB. Suppose that we have \(n\) 
+  observations which we will represent as \(n\) random variables \(X_1, X_2, \dots, X_n\) 
+  which are iid with their distribution given by some density function \(f(x|\theta)\). 
+  Then we say that the variance of any unbiased estimator, \(\hat{\theta}\), of true 
+  unknown parameter \(\theta\) is bounded by
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var(\hat{\theta}) \geq \frac{1}{nI(\theta)}.
+  \]
+</p>
+
+<p>
+  Recall the score function, which is given by 
+  \(\tfrac{\partial}{\partial \theta} \log f(x|\theta) 
+    = \tfrac{\frac{\partial}{\partial\theta}f(x|\theta)}{f(x|\theta)}\) 
+  which is obtained by taking the derivative of a logarithm. Let the score be 
+  denoted by \(z(\theta|x)\) then we may say that 
+  \(Z = Z(X_1, X_2, \dots, X_n) = \sum_{i=1}^{n} z(\theta|X_i)\) or the score for all 
+  \(n\) observations is equal to \(n\) copies of the score function evaluated for any 
+  observation \(X_i\). Further, by the Cauchy Schwarz inequality
+</p>
+
+<p style="text-align:center;">
+  \[
+    Cov_{\theta}(Z, \hat{\theta})^2 
+    \leq Var_{\theta}(Z)\,Var_{\theta}(\hat{\theta})
+  \]
+</p>
+
+<p>
+  since we have \(n\) scores we have \(n\) random variables 
+  \(z(\theta|X_1), z(\theta|X_2), \dots, z(\theta|X_n)\) which are iid, and since they 
+  are each evaluated with respect to the true unknown parameter \(\theta\), have mean 
+  \(0\) and variance equal to the Fisher information \(I(\theta)\). Then,
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var_{\theta}(Z) 
+    = n\,Var_{\theta}\bigl(z(X_i|\theta)\bigr) 
+    = n\,I(\theta).
+  \]
+</p>
+
+<p>
+  now we know that \(\hat{\theta}\) is an unbiased estimator of \(\theta\), which is 
+  generated by the data \(X_1, X_2, \dots, X_n\). Thus
+</p>
+
+<p style="text-align:center;">
+  \[
+    \theta = E_{\theta}[\hat{\theta}] 
+    = \int_{\mathcal{R}^n} 
+      \hat{\theta}(x_1, x_2, \dots, x_n)\,f(x_1|\theta)f(x_2|\theta)\dots f(x_n|\theta)
+      \,dx_1\,dx_2\dots dx_n.
+  \]
+</p>
+
+<p>
+  What we want to do here is relate our quantity to the score, which will then allow 
+  us to connect it to the Fisher information since that is the variance of the score 
+  (evaluated at \(\theta\)). We can achieve this by evaluating the partial derivative 
+  with respect to \(\theta\) which gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{\partial}{\partial \theta}\Bigl(
+      \theta = \int_{\mathcal{R}^n} 
+      \hat{\theta}(x_1, x_2, \dots, x_n)\,f(x_1|\theta)\dots f(x_n|\theta)\,dx_1\dots dx_n
+    \Bigr)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    1 
+    = \frac{\partial}{\partial\theta}\Bigl(
+        \int_{\mathcal{R}^n} 
+        \hat{\theta}(x_1, x_2, \dots, x_n)\,f(x_1|\theta)\dots f(x_n|\theta)\,dx_1\dots dx_n
+      \Bigr)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    1 
+    = \int_{\mathcal{R}^n} 
+      \hat{\theta}(x_1, x_2, \dots, x_n)\,
+      \frac{\partial}{\partial \theta}
+      \bigl(f(x_1|\theta)\dots f(x_n|\theta)\bigr)\,dx_1\dots dx_n
+  \]
+</p>
+
+<p>
+  since we have a product of \(n\) density functions \(f(x_i|\theta)\) we need to use 
+  the <strong>generalized product rule</strong> which can handle such cases. This is 
+  given by
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{d}{dx}\Bigl(\prod_{i=1}^{k} f_i(x)\Bigr)
+    = \sum_{i=1}^{n}\Bigl(
+        \bigl(\frac{d}{dx}f_i(x)\bigr)\,\prod_{j=1,\,j \neq i}^{k} f_j(x)
+      \Bigr).
+  \]
+</p>
+
+<p>
+  Applying the rule allows us to rewrite our expression as
+</p>
+
+<p style="text-align:center;">
+  \[
+    1 
+    = \int_{\mathcal{R}^n} 
+      \hat{\theta}(x_1, x_2, \dots, x_n)\,\Bigl(
+        \frac{\partial}{\partial \theta}f(x_1|\theta)\,f(x_2|\theta)\dots f(x_n|\theta)
+        + f(x_1|\theta)\,\frac{\partial}{\partial \theta}f(x_2|\theta)\dots f(x_n|\theta)
+        + \dots 
+        + f(x_1|\theta)\dots\frac{\partial}{\partial \theta}f(x_n|\theta)
+      \Bigr)dx_1\dots dx_n
+  \]
+</p>
+
+<p>
+  where we recall that the score is equal to 
+  \(\frac{\partial}{\partial\theta}\log f(x|\theta) 
+   = \tfrac{\frac{\partial}{\partial\theta}f(x|\theta)}{f(x|\theta)}\) 
+  and so 
+  \(f(x|\theta)\,\tfrac{\partial}{\partial\theta}\log f(x|\theta) 
+    = \tfrac{\partial}{\partial\theta} f(x|\theta)\). 
+  Then our product reduces to
+</p>
+
+<p style="text-align:center;">
+  \[
+    1 
+    = \int_{\mathcal{R}^n} 
+      \hat{\theta}(x_1, x_2, \dots, x_n)\,Z(x_1, x_2, \dots, x_n)\,
+      f(x_1|\theta)\dots f(x_n|\theta)\,dx_1\dots dx_n
+  \]
+</p>
+
+<p>
+  which is equal to the average with respect to \(\theta\) of \(\hat{\theta}\) and 
+  \(Z\), the sum of the scores
+</p>
+
+<p style="text-align:center;">
+  \[
+    1 = E_{\theta}[\hat{\theta}Z].
+  \]
+</p>
+
+<p>
+  now we know that the average with respect to \(\theta\) of \(Z\) is \(0\). 
+  This also means that 
+  \(Cov_{\theta}(Z, \hat{\theta}) = E_{\theta}[\hat{\theta}Z]\) which we know is 
+  equal to \(1\). We return to the inequality we established earlier
+</p>
+
+<p style="text-align:center;">
+  \[
+    Cov_{\theta}(Z, \hat{\theta})^2 
+    \leq Var_{\theta}(Z)\,Var_{\theta}(\hat{\theta})
+  \]
+</p>
+
+<p>
+  which is the same as
+</p>
+
+<p style="text-align:center;">
+  \[
+    E_{\theta}(\hat{\theta}Z)^2 
+    \leq Var_{\theta}(Z)\,Var_{\theta}(\hat{\theta})
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    1 \leq Var_{\theta}(Z)\,Var_{\theta}(\hat{\theta})
+  \]
+</p>
+
+<p>
+  where the variance of \(Z\) is \(nI(\theta)\) so
+</p>
+
+<p style="text-align:center;">
+  \[
+    Var_{\theta}(\hat{\theta})
+    \geq \frac{1}{nI(\theta)}.
+  \]
+</p>
+
+<p>
+  proving the CRLB. Since parameters obtained via MLE achieve the CRLB we call them 
+  <strong>minimum variance unbiased estimators</strong>, or MVUE, and the conditions 
+  necessary for MLE are desirable for this reason.
+</p>
+
+<hr/>
+<p><a href="index.html">Return to Home Page</a></p>
+
+</body>
+</html>
