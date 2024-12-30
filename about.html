@@ -42,6 +42,115 @@
       = \mu
     \]
   </p>
+
+  <p>
+    and thus the average of the sample means is the population mean. 
+    The variance of the sample mean is:
+  </p>
+  
+  <!-- Display math (centered) -->
+  <p style="text-align:center;">
+    \[
+      \mathrm{Var}(\bar{X}) 
+      = \mathrm{Var}\!\Bigl(\tfrac{1}{n} \sum_{i=1}^{n} X_i\Bigr) 
+      = \tfrac{1}{n^2} \sum_{i=1}^{n} \mathrm{Var}(X_i) 
+      = \tfrac{1}{n^2} \sum_{i=1}^{n} \sigma^2 
+      = \tfrac{\sigma^2}{n}
+    \]
+  </p>
+  
+  <p>
+    Thus the mean of the sampling distribution of sample means 
+    \(\bar{X}_i\) is equal to the population mean with variance 
+    \(\frac{\sigma^2}{n}\). To standardize the sample mean we center it 
+    around the mean of the sample means (the population mean) and divide 
+    by its standard deviation, which gives:
+  </p>
+  
+  <p style="text-align:center;">
+    \[
+      \frac{\bar{X} - \mu}{\frac{\sigma}{\sqrt{n}}} 
+      = \frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}
+    \]
+  </p>
+  
+  <p style="text-align:center;">
+    \[
+      = \frac{\sqrt{n}\Bigl(\tfrac{1}{n}\sum_{i=1}^{n} X_i - \mu\Bigr)}{\sigma}
+    \]
+  </p>
+  
+  <p style="text-align:center;">
+    \[
+      = \frac{\tfrac{1}{\sqrt{n}} \sum_{i=1}^{n} X_i - \sqrt{n}\,\mu}{\sigma}
+    \]
+  </p>
+  
+  <p>
+    We can call the standardized sample mean by a new random variable 
+    \(\bar{X}_s\) (where <em>s</em> indicates "standardized"), and our goal 
+    is to show that this converges in distribution to the standard normal 
+    for large enough \(n\). That is, 
+    \(\bar{X}_s \xrightarrow{d} \mathcal{N}(0,1)\).
+  </p>
+  
+  <p>
+    Now rather than dealing with sample means directly, we can discuss 
+    \(S\), the sum of our sample of iid random variables, 
+    \(\sum_{i=1}^{n} X_i\). The sampling distribution of the sample sums 
+    \(S\) has mean 
+    \(E[S] = E\Bigl(\sum_{i=1}^{n} X_i\Bigr) = \sum_{i=1}^{n} E[X_i] = n\mu\) 
+    and variance 
+    \(\mathrm{Var}(S) = \sum_{i=1}^{n} \mathrm{Var}(X_i) = n\sigma^2\) 
+    respectively. Standardizing the sample sum gives:
+  </p>
+  
+  <p style="text-align:center;">
+    \[
+      S^* = \frac{S - n\mu}{\sqrt{n}\sigma}
+    \]
+  </p>
+  
+  <p style="text-align:center;">
+    \[
+      = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma}
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      = \frac{\tfrac{1}{\sqrt{n}}\,\bigl(\sum_{i=1}^{n} X_i - n\mu\bigr)}{\sigma}
+    \]
+  </p>
+  
+  <p style="text-align:center;">
+    \[
+      = \frac{\tfrac{1}{\sqrt{n}} \sum_{i=1}^{n} X_i - \sqrt{n}\,\mu}{\sigma}
+    \]
+  </p>
+
+  <p>
+    We can see this is equivalent to the standardized sample mean. Thus, 
+    proving that sample sums converge to the standard normal distribution 
+    also proves that the distribution of sample means does, and hence 
+    proves the CLT.
+  </p>
+  
+  <p>
+    We now consider the standard normal distribution and its moment 
+    generating function. The density function for the standard normal 
+    distribution is given by 
+    \[
+      f_Z(x) = f\bigl(x \mid \mu=0,\sigma^2=1\bigr) 
+      = \frac{1}{\sqrt{2\pi}} e^{-\tfrac{x^2}{2}}
+    \]
+    for some standard normal random variable \(Z\). Then
+    \[
+      M_Z(t) = E\bigl[e^{Xt}\bigr] 
+      = \int_{-\infty}^{\infty} e^{xt}\,\frac{1}{\sqrt{2\pi}}\,e^{-\tfrac{x^2}{2}}\,dx.
+    \]
+    We can simplify this like so...
+  </p>
   
   <p>
   
