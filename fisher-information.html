@@ -1,1 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>fisher-information</title>
+  <!-- Load MathJax (version 3) from a public CDN -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
 
+  <h2>Fisher Information</h2>
+
+  <!-- Main text block (content unchanged) -->
+  <p>
+    The \textbf{Fisher Information} or the information \(\mathcal{I}(\theta)\) is the 
+    variance of the score 
+    \(\mathrm{Var}\!\bigl(\tfrac{\partial \log L(\theta \mid x)}{\partial \theta}\bigr)\) 
+    at the true unknown parameter \(\theta\). It can also be shown to be equal to 
+    \(-E\!\bigl[\tfrac{\partial^2 \log L(\theta \mid x)}{\partial \theta \,\partial \theta^T}\bigr]\),
+    the negative average of the second derivative of the log likelihood function, 
+    which is a useful result. The Fisher information derives its name from how it 
+    describes how well estimated the true unknown parameter value is given the data. 
+    If the Fisher information has a high value then there is high variance around the 
+    true unknown parameter, making its value easy to identify. On the other hand, if 
+    the matrix returns a low value then the true unknown parameter is harder to 
+    identify. We thus state that Fisher's metric provides a sense of 'information' 
+    about the true unknown parameter(s) from the data, and when we have multiple 
+    parameters we call this quantity the \textbf{Fisher Information Matrix} (or 
+    Fisher matrix, Information matrix etc). Further, in the multivariate case, we 
+    are interested in the diagonal elements as they will tell us the variance of the 
+    score about each of the true unknown parameters, whereas the off diagonal entries 
+    will tell us the covariance. We are interested in the multivariate case, the 
+    Fisher matrix, since it may be applied to general results. To this end, we derive 
+    its expression as the variance of the score about the true unknown parameters.
+  </p>
+
+  <p>
+    Recall that variance is given by 
+    \(E\bigl[(X - E[X])^2\bigr] = E[X^2] - \bigl(E[X]\bigr)^2\). Substituting in the 
+    score we have 
+    \(E\bigl[s(\theta \mid x)^2\bigr] - \bigl(E[s(\theta \mid x)]\bigr)^2\). Let 
+    \(\nabla_{\theta}\) denote the gradient with respect to \(\theta\), where 
+    \(\theta\) is the true unknown parameter, and observe that
+  </p>
+
+  <!-- Displaying the centered equation. 
+       We replace \begin{center}...\end{center} with a centered <p> containing \[...\] -->
+  <p style="text-align:center;">
+    \[
+      (E[s(\theta \mid x)])^2 
+      = \Bigl(\int \nabla_{\theta}\,\ln\bigl(f(x \mid \theta)\bigr)\,f(x \mid \theta)\,dx\Bigr)^2
+    \]
+  </p>
+
+  <p>
+    <!-- Link back to home page (optional) -->
+    <a href="index.html">Return to Home Page</a>
+  </p>
+
+</body>
+</html>
