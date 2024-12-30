@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>cooks-distance</title>
+  <!-- Load MathJax (version 3) from a public CDN -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<h2>Cook's Distance</h2>
+
+<p>
+  To get a sense of a general model outlier, or an observation that is an outlier in both 
+  the \(x\) and \(y\) space, we may use <strong>Cook's distance</strong>. Cook's distance 
+  measures the influence of an observation, which is the amount by which an observation 
+  would change the model if it was removed from the data. This is very useful if our 
+  model is correctly specified to the data as we can identify one or two points that are 
+  so extreme from the overall trend that it throws the entire model off. Cook's distance 
+  is given by the following formula
+</p>
+
+<p style="text-align:center;">
+  \[
+    D_i = \frac{e_i^2}{p\,s^2}
+      \Bigl(\frac{h_{ii}}{(1-h_{ii})^2}\Bigr)
+  \]
+</p>
+
+<p>
+  and like all formulas in this paper, we provide its derivation. This derivation is very 
+  long and involved and so we will approach it one part at a time. A crucial piece of 
+  deriving Cook's distance is the <strong>Sherman-Woodbury formula</strong> which is 
+  given by
+</p>
+
+<p style="text-align:center;">
+  \[
+    (A + \vec{u}\vec{v}^T)^{-1} 
+    = A^{-1} 
+      - \frac{A^{-1}\vec{u}\,\vec{v}^T\,A^{-1}}{1 + \vec{v}^T A^{-1}\vec{u}}
+  \]
+</p>
+
+<p>
+  where \(A\) is an invertible square matrix and vectors \(\vec{u}, \vec{v}\) are column 
+  vectors of equal dimension such that they may be multiplied. The identity allows us to, 
+  relatively easily, calculate the inverse of an expression of the form 
+  \((A + \vec{u}\vec{v}^T)^{-1}\), and its applicability in the derivation of Cook's 
+  distance will soon become clear. To derive this formula we consider the following problem
+</p>
+
+<p style="text-align:center;">
+  \[
+    (A + \vec{u}\vec{v}^T)\,\vec{x} = \vec{y}
+  \]
+</p>
+
+<p>
+  where \(\vec{x}\), \(\vec{u}\), and \(\vec{v}\) are all equal dimension, and solve 
+  for \(\vec{x}\). We have
+</p>
+
+<p style="text-align:center;">
+  \[
+    A\vec{x} + \vec{u}\,\vec{v}^T\vec{x} = \vec{y},
+    \quad
+    A\vec{x} = \vec{y} - \vec{u}\,\vec{v}^T\vec{x},
+    \quad
+    \vec{x} = A^{-1}\vec{y} - A^{-1}\vec{u}\,\vec{v}^T\vec{x}.
+  \]
+</p>
+
+<p>
+  Now we know that since all vectors are of equal dimension then \(\vec{v}^T\vec{x}\) 
+  is a valid operation and is equal to some number (scalar) which we may call \(s\). 
+  Rewriting our expression for \(\vec{x}\) gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{x} = A^{-1}\vec{y} - A^{-1}\vec{u}\,s.
+  \]
+</p>
+
+<p>
+  Multiplying each side by a multiple of \(\vec{v}^T\), a multiple of 1, we have
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{v}^T\vec{x} 
+    = \vec{v}^T A^{-1}\vec{y} 
+      - \vec{v}^T A^{-1}\vec{u}\,s,
+    \quad
+    s = \vec{v}^T A^{-1}\vec{y} - \vec{v}^T A^{-1}\vec{u}\,s.
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    s + \vec{v}^T A^{-1}\vec{u}\,s = \vec{v}^T A^{-1}\vec{y},
+    \quad
+    s\bigl(1 + \vec{v}^T A^{-1}\vec{u}\bigr) = \vec{v}^T A^{-1}\vec{y}.
+  \]
+</p>
+
+<p>
+  since \(1 + \vec{v}^T A^{-1}\vec{u}\) is a constant we can divide it out and
+</p>
+
+<p style="text-align:center;">
+  \[
+    s = \frac{\vec{v}^T A^{-1}\vec{y}}{1 + \vec{v}^T A^{-1}\vec{u}}.
+  \]
+</p>
+
+<p>
+  Now we substitute in for \(s\) into our expression for \(\vec{x}\) and obtain
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{x} 
+    = A^{-1}\vec{y} 
+      - A^{-1}\vec{u}\,\frac{\vec{v}^T A^{-1}\vec{y}}{1 + \vec{v}^T A^{-1}\vec{u}}
+    = A^{-1}\vec{y} 
+      - \frac{A^{-1}\vec{u}\,\vec{v}^T A^{-1}\vec{y}}{1 + \vec{v}^T A^{-1}\vec{u}}.
+  \]
+</p>
+
+<p>
+  and because \(\vec{x} = (A + \vec{u}\vec{v}^T)^{-1}\vec{y}\) then
+</p>
+
+<p style="text-align:center;">
+  \[
+    (A + \vec{u}\vec{v}^T)^{-1}
+    = A^{-1} 
+      - \frac{A^{-1}\vec{u}\,\vec{v}^T A^{-1}}{1 + \vec{v}^T A^{-1}\vec{u}},
+  \]
+</p>
+
+<p>
+  which proves the Sherman-Woodbury identity. We will now use this identity to derive 
+  Cook's distance. We begin by recapping the basics of the regression problem. We have 
+  a model \(\vec{y} = X\vec{\beta} + \vec{\epsilon}\) where \(\vec{\epsilon}\) is the 
+  vector of randomly distributed errors where we assume that \(E[\vec{\epsilon}] = 0\) 
+  and \(Var(\vec{\epsilon}) = \sigma^2 I\). Further note that 
+  \(\vec{\beta} = (X^TX)^{-1}X^T\vec{y}\), the residual vector 
+  \(\vec{e} = \vec{y} - \vec{\hat{y}} 
+    = \vec{y} - X\vec{\hat{\beta}} 
+    = \vec{y} - X(X^TX)^{-1}X^T\vec{y} 
+    = \vec{y}\bigl(I - X(X^TX)^{-1}X^T\bigr)\)
+  with covariance matrices of \(\vec{\hat{y}}\) and \(\vec{e}\) as 
+  \(Var(\vec{\hat{y}}) = X(X^TX)^{-1}X^T\sigma^2\) and 
+  \(Var(\vec{e}) = (I - X(X^TX)^{-1}X^T)\sigma^2\) respectively. Furthermore, we know that 
+  a <strong>confidence region</strong> may generally be considered as a multivariate 
+  generalization of a confidence interval, and that such a region (often an ellipsoid) 
+  may be written as
+</p>
+
+<p style="text-align:center;">
+  \[
+    (\vec{\beta}^* - \vec{\hat{\beta}})^T\,X^TX\,(\vec{\beta}^* - \vec{\hat{\beta}})
+    \;\leq\; p\,s^2\,F\bigl(p,\;n-p,\;1-\alpha\bigr)
+  \]
+</p>
+
+<p>
+  for regression problems. Here \(s^2\) is the estimate for \(\sigma^2\), the true 
+  unknown variance of the error, and \(F(p,\,n-p,\,1-\alpha)\) is the critical value 
+  from the \(F\) distribution, with \(p\) and \(n-p\), and a \(1-\alpha\) significance 
+  level. The confidence region tells us, for our chosen level of confidence such as 
+  \(90\%\), a region in the parameter space where the true vector of coefficients 
+  \(\vec{\beta}\) is likely to be. That is, for a \(90\%\) confidence level \(90\) 
+  out of \(100\) random regions will contain the true unknown vector of fixed parameters 
+  and the remaining \(10\) will not. The central idea of Cook's distance is to see 
+  whether or not removing a single observation significantly alters the constructed 
+  confidence region for \(\vec{\beta}\). If it does, then the observation heavily 
+  influences our coefficient estimation and has a high Cook's distance; otherwise 
+  it does not.
+</p>
+
+<p>
+  Let \(\vec{\beta}_{-i}\) denote the OLS fit with the \(i^{th}\) point deleted; then we 
+  may write Cook's distance as
+</p>
+
+<p style="text-align:center;">
+  \[
+    D_i 
+    = \frac{\bigl(\vec{\hat{\beta}} - \vec{\hat{\beta}}_{-i}\bigr)^T 
+      X^TX\bigl(\vec{\hat{\beta}} - \vec{\hat{\beta}}_{-i}\bigr)}
+      {p\,s^2}
+  \]
+</p>
+
+<p>
+  for any observation \(i = 1, 2, \dots, n\). One potential problem with Cook's distance 
+  is that every time a point is removed \(\vec{\hat{\beta}}_{-i}\) must be recalculated. 
+  That is, the regression must be done \(n + 1\) times for all \(n\) points. This is 
+  computationally expensive and time consuming, so one way to make this easier is using 
+  the Sherman-Woodbury formula and we will demonstrate why. When the \(i^{th}\) 
+  observation is removed then 
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{\hat{\beta}}_{-i} 
+    = (X_{-i}^T\,X_{-i})^{-1}\,X_{-i}^T\vec{y}_{-i}.
+  \]
+</p>
+
+<p>
+  The most difficult part of this calculation is the inverse matrix, which the 
+  Sherman-Woodbury formula allows us to efficiently deal with. Let 
+  \(A = X^TX\) and \(A_{-i} = X_{-i}^T\,X_{-i}\). The Sherman-Woodbury formula tells us 
+  that \((A + \vec{u}\vec{v}^T)^{-1} 
+    = A^{-1} 
+    - \frac{A^{-1}\vec{u}\,\vec{v}^T\,A^{-1}}{1 + \vec{v}^T A^{-1}\vec{u}}\)
+  and, similarly, that 
+  \((A - \vec{u}\vec{v}^T)^{-1}
+    = A^{-1} 
+    + \frac{A^{-1}\vec{u}\,\vec{v}^T\,A^{-1}}{1 - \vec{v}^T A^{-1}\vec{u}}\).
+  We also have that 
+  \(X^TX = X_{-i}^T\,X_{-i} + \vec{x}_i \,\vec{x}_i^T\) 
+  where \(\vec{x}_i\) is the \(i^{th}\) row vector of \(X\), which corresponds to 
+  the \(i^{th}\) observation.
+</p>
+
+<p>
+  Why is this true? Because \(X^TX\) may be given by 
+  \[
+    X^TX = \sum_{j=1}^{n} \vec{x}_j\vec{x}_j^T
+  \]
+  where the product of every \(\vec{x}_j\vec{x}_j^T\) produces a \(k \times k\) matrix 
+  which, when summed together for all vector products, returns the full matrix \(X^TX\). 
+  Since we may write \(X^TX\) in this way, then we can apply the Sherman-Woodbury formula 
+  which gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    (A - \vec{x}_i\vec{x}_i^T)^{-1}
+    = A^{-1} 
+      + \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}}
+             {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i},
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{\hat{\beta}}_{-i}
+    = \Bigl(
+        A^{-1} 
+        + \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}}
+               {1 - \vec{x}_i^T A^{-1}\vec{x}_i}
+      \Bigr)
+      \bigl(X^T\vec{y} - \vec{x}_i\,y_i\bigr).
+  \]
+</p>
+
+<p>
+  We also know that \(\vec{\hat{\beta}} 
+    = (X^TX)^{-1}X^T\vec{y} 
+    = A^{-1}X^T\vec{y}\). Then
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{\hat{\beta}} - \vec{\hat{\beta}}_{-i}
+    = A^{-1}X^T\vec{y}
+      - \Bigl(
+          A^{-1} 
+          + \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}}
+                 {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}
+        \Bigr)\bigl(X^T\vec{y} - \vec{x}_i\,y_i\bigr).
+  \]
+</p>
+
+<p>
+  What we are now going to do is simplify this expression. This is challenging to do but 
+  the best approach is to start with the right side since it is the most computationally 
+  involved.
+</p>
+
+<p style="text-align:center;">
+  \[
+    \Bigl(
+      A^{-1} 
+      + \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}}
+             {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}
+    \Bigr)
+    \bigl(X^T\vec{y} - \vec{x}_i\,y_i\bigr)
+    = A^{-1}X^T\vec{y} 
+      - A^{-1}\vec{x}_i\,y_i 
+      + \Bigl(
+          \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}}
+               {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}
+        \Bigr)\bigl(X^T\vec{y} - \vec{x}_i\,y_i\bigr).
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    \Bigl(
+      \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}}
+           {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}
+    \Bigr)\bigl(X^T\vec{y} - \vec{x}_i\,y_i\bigr)
+    = \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}\,X^T\vec{y}}
+           {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}
+      \;-\;
+      \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}\,\vec{x}_i\,y_i}
+           {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}.
+  \]
+</p>
+
+<p>
+  now we recall that \(A^{-1}X^T\vec{y} = \vec{\hat{\beta}}\) which gives
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,\vec{\hat{\beta}}}
+         {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}
+    \;-\;
+    \frac{A^{-1}\,\vec{x}_i\,\vec{x}_i^T\,A^{-1}\,\vec{x}_i\,y_i}
+         {1 - \vec{x}_i^T A^{-1}\,\vec{x}_i}
+    = \frac{
+        A^{-1}\,\vec{x}_i
+        \bigl(\vec{x}_i^T\vec{\hat{\beta}} 
+          - \vec{x}_i^T A^{-1}\,\vec{x}_i\,y_i\bigr)
+      }{
+        1 - \vec{x}_i^T A^{-1}\,\vec{x}_i
+      }.
+  \]
+</p>
+
+<p>
+  and we further observe that \(\vec{x}_i^T\vec{\hat{\beta}} = \hat{y}_i\) or a single 
+  estimated observation, which gives the following
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{
+      A^{-1}\,\vec{x}_i\,\bigl(\hat{y}_i 
+        - \vec{x}_i^T A^{-1}\,\vec{x}_i\,y_i\bigr)
+    }{
+      1 - \vec{x}_i^T A^{-1}\,\vec{x}_i
+    }.
+  \]
+</p>
+
+<p>
+  Also \(\vec{x}_i^T A^{-1}\,\vec{x}_i 
+    = \vec{x}_i^T (X^TX)^{-1}\,\vec{x}_i\), 
+  where \(X(X^TX)^{-1}X^T\) is the projection or hat matrix \(H\), the diagonal elements 
+  of which are the leverages \(h_{ii}\). Thus
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{A^{-1}\,\vec{x}_i\,(\hat{y}_i - h_{ii}\,y_i)}{1 - h_{ii}}
+  \]
+</p>
+
+<p>
+  and the entire expression for \(\vec{\hat{\beta}}_{-i}\) may be written as
+</p>
+
+<p style="text-align:center;">
+  \[
+    \vec{\hat{\beta}}
+    - A^{-1}\,\vec{x}_i\,y_i
+    + \frac{A^{-1}\,\vec{x}_i\,(\hat{y}_i - h_{ii}\,y_i)}{1 - h_{ii}}.
+  \]
+</p>
+
+<p>
+  When we subtract this from \(\vec{\hat{\beta}}\) we have
+</p>
+
+<p style="text-align:center;">
+  \[
+    A^{-1}\,\vec{x}_i\,y_i
+    - \frac{A^{-1}\,\vec{x}_i\,(\hat{y}_i - h_{ii}\,y_i)}{1 - h_{ii}}
+    = A^{-1}\,\vec{x}_i\Bigl(y_i 
+      - \frac{\hat{y}_i - h_{ii}\,y_i}{1 - h_{ii}}\Bigr)
+  \]
+</p>
+
+<p style="text-align:center;">
+  \[
+    = A^{-1}\,\vec{x}_i\Bigl(
+      \frac{y_i - y_i h_{ii} - (\hat{y}_i - h_{ii}\,y_i)}{1 - h_{ii}}
+    \Bigr)
+    = A^{-1}\,\vec{x}_i\Bigl(\frac{y_i - \hat{y}_i}{1 - h_{ii}}\Bigr)
+    = (X^TX)^{-1}\,\vec{x}_i \,\frac{y_i - \hat{y}_i}{1 - h_{ii}}.
+  \]
+</p>
+
+<p>
+  which is our solution to \(\vec{\hat{\beta}} - \vec{\hat{\beta}}_{-i}\). Our expression 
+  for Cook's distance is
+</p>
+
+<p style="text-align:center;">
+  \[
+    D_i 
+    = \frac{
+      \bigl(\vec{\hat{\beta}} - \vec{\hat{\beta}}_{-i}\bigr)^T
+      X^TX
+      \bigl(\vec{\hat{\beta}} - \vec{\hat{\beta}}_{-i}\bigr)
+    }{
+      p\,s^2
+    }
+  \]
+</p>
+
+<p>
+  into which we substitute our expression for 
+  \(\vec{\hat{\beta}} - \vec{\hat{\beta}}_{-i}\). This returns
+</p>
+
+<p style="text-align:center;">
+  \[
+    \frac{
+      \bigl(\tfrac{(X^TX)^{-1}\,\vec{x}_i(y_i - \hat{y}_i)}{1-h_{ii}}\bigr)^T
+      X^TX
+      \bigl(\tfrac{(X^TX)^{-1}\,\vec{x}_i(y_i - \hat{y}_i)}{1-h_{ii}}\bigr)
+    }{
+      p\,s^2
+    },
+  \]
+</p>
+
+<p>
+  where
+</p>
+
+<p style="text-align:center;">
+  \[
+    \Bigl(
+      \tfrac{(X^TX)^{-1}\,\vec{x}_i\,(y_i - \hat{y}_i)}{1 - h_{ii}}
+    \Bigr)^T
+    = \frac{(y_i - \hat{y}_i)\,\vec{x}_i^T (X^TX)^{-1}}{1 - h_{ii}}.
+  \]
+</p>
+
+<p>
+  When we multiply through our expression for \(D_i\) we have, in the numerator,
+</p>
+
+<p style="text-align:center;">
+  \[
+    (y_i - \hat{y}_i)^2\;\vec{x}_i^T (X^TX)^{-1} (X^TX) (X^TX)^{-1}\,\vec{x}_i
+  \]
+</p>
+
+<p>
+  and \((1 - h_{ii})^2\) in the denominator. The numerator simplifies to
+</p>
+
+<p style="text-align:center;">
+  \[
+    (y_i - \hat{y}_i)^2\;\vec{x}_i^T (X^TX)^{-1}\,\vec{x}_i
+  \]
+</p>
+
+<p>
+  since the inverse matrices equal \(I\) in the product. And since we have previously 
+  established that \(\vec{x}_i^T (X^TX)^{-1}\,\vec{x}_i = h_{ii}\), or the \(i^{th}\) 
+  leverage value, we have
+</p>
+
+<p style="text-align:center;">
+  \[
+    D_i 
+    = \frac{(y_i - \hat{y}_i)^2\,h_{ii}}{p\,s^2\,(1 - h_{ii})^2}.
+  \]
+</p>
+
+<p>
+  where the estimated studentized residual is given by 
+  \(\tfrac{y_i - \hat{y}_i}{s\sqrt{1-h_{ii}}} = \tfrac{e_i}{s\sqrt{1-h_{ii}}}\). 
+  Hence, the expression for Cook's distance may again be rewritten as
+</p>
+
+<p style="text-align:center;">
+  \[
+    D_i
+    = \Bigl(\tfrac{y_i - \hat{y}_i}{s\sqrt{1 - h_{ii}}}\Bigr)^2
+      \Bigl(\tfrac{h_{ii}}{p\,\bigl(1 - h_{ii}\bigr)}\Bigr)
+    = \frac{e_i^2}{p\,s^2}\Bigl(\frac{h_{ii}}{(1 - h_{ii})^2}\Bigr),
+  \]
+</p>
+
+<p>
+  as was originally given as the formula for Cook's distance.
+</p>
+
+<hr/>
+<p><a href="index.html">Return to Home Page</a></p>
+
+</body>
+</html>
