@@ -10,24 +10,41 @@
 <body>
   <h1>About Me</h1>
   
-  <!-- Here is where we insert your LaTeX code. You can use inline math with \( ... \) -->
+ <h1>Lindeberg-Levy CLT</h1>
+  
   <p>
-    My favorite integral is \( \displaystyle \int_{0}^{\infty} x^2 \,dx \). 
-    (This one diverges, but let's just pretend for an example!)
+    The Lindeberg-Levy CLT states that suppose we have some sample of random variables 
+    \(X_1, X_2, X_3, \ldots\) drawn from a population, which are independent and 
+    identically distributed (the value of one does not change the value of any 
+    other and all have the same distribution), with sample mean \(\bar{X_i}\), 
+    population mean \(E[X_i] = \mu\), and population variance 
+    \(\mathrm{Var}(X_i) = \sigma^2 < \infty\) (finite variance). 
+    Then as the sample size \(n\) approaches \(\infty\), the standardized sample means 
+    \(\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma}\) converge in distribution to the 
+    standard normal distribution \(\mathcal{N}(0,1)\).
   </p>
   
-  <!-- For display math, use \[ ... \] to put the equation on its own line -->
   <p>
-    And here’s a famous equation:
+    In other words, the distribution of the sample mean, with samples drawn from some 
+    population that has a mean and variance (first and second moments), will be 
+    normally distributed for large enough sample size \(n\). To prove the CLT, we 
+    consider the sample mean 
+    \(\bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i\) 
+    which, on average, is:
+  </p>
+  
+  <!-- Display math (centered) -->
+  <p style="text-align:center;">
     \[
-      E = mc^2
+      E[\bar{X}] 
+      = E\!\Bigl[\tfrac{1}{n} \sum_{i=1}^{n} X_i\Bigr] 
+      = \tfrac{1}{n} \sum_{i=1}^{n} E[X_i] 
+      = \tfrac{1}{n} n\mu 
+      = \mu
     \]
   </p>
-
+  
   <p>
-    Another inline example: \( f(x) = ax^2 + bx + c \).
-  </p>
-
   
   <!-- Link back to the Home page -->
   <p><a href="index.html">Return to Home Page</a></p>
