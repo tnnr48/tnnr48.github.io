@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>information-and-entropy</title>
+  <!-- Load MathJax (version 3) from a public CDN -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+  <h2>Information and Entropy</h2>
+
+  <p>
+    Suppose we have a coin and the chance of getting a heads or tails when 
+    flipping the coin is parameterized by $p(H) = \theta$. Suppose $\theta = 1$ 
+    then when we flip the the coin our outcome is guaranteed to be heads and 
+    this is very boring and not surprising. There is nothing informative about 
+    the result. On the other hand, suppose that $\theta = \frac{1}{3}$ then we 
+    have a stronger chance to get tails than heads but it isn't a sure bet and 
+    so this is more interesting. Now suppose $\theta = \frac{1}{2}$ then we may 
+    get heads or get tails with a $50/50$ chance, so these results are more 
+    interesting and uncertain than coin tosses that are always or nearly always 
+    the same result.
+  </p>
+
+  <p>
+    We can then define the information content of an outcome of a random 
+    variable $x_i \in X$ as
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      I(x_i) = \log(\frac{1}{p(x_i)}) = \log(1) - \log(p(x_i)) = 0 - \log(p(x_i)) = -\log(p(x_i))
+    \]
+  </p>
+
+  <p>
+    How do we arrive at this expression? When an outcome is more certain it is 
+    less surprising and requires less information to describe it and when it is 
+    less certain the reverse is true. Thus we could derive an initial expression 
+    for information as the inverse of the probability of an outcome
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      I(x_i) = \frac{1}{p(x_i)}
+    \]
+  </p>
+
+  <p>
+    However this expression is not appropriate as $I(H) = \frac{1}{\theta}$ and 
+    if $p(H) = 1$ then $I(H) = 1$. We can think about it like this, when the 
+    outcome of a coin toss, or an event is always the same then we learn 
+    nothing new. We gain no new information. A result of $1$ for an outcome that 
+    is certain does not accurately describe what's occurring here. A function 
+    that describes this is $\log(x)$ as when an event's outcome is certain 
+    $p(x_i) = 1$ then $\log(p(x_i)) = \log(1) = 0$, or nothing new learned. 
+    The choice of base for the logarithm determines how much information is 
+    returned for events whose outcomes are not certain. Suppose we have base 
+    $2$, $\log_2(p(x))$ then the following information is returned by the 
+    chosen $\theta$ values above
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      -\log_2(\frac{1}{3}) = 1.58
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      -\log_2(\frac{1}{2}) = 1
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      -\log_2(\frac{2}{3}) = 0.58
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      \log_2(1) = 0
+    \]
+  </p>
+
+  <p>
+    Where the values are in \textbf{bits} and a value of $1$ is $1$ bit of 
+    information. As we can see, the more surprising an outcome is the more 
+    information it returns. However, as mentioned at the beginning, when we 
+    observe multiple outcomes of $X = {x_1, x_2, x_3, ..., x_n}$ each with 
+    corresponding probability $p(x_i)$ for $i = 1, 2, 3, ..., n$ the surprise 
+    or information returned will be lower when these outcomes tend to be the 
+    same. We can calculate the average information of a random variable or the 
+    entropy given by
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      H(X) = -\sum_{i=1}^{n} p(x_i)\log(p(x_i))
+    \]
+  </p>
+
+  <p>
+    This is also called the average disorder but all terms mean the same 
+    thing. If we consider coin tosses then we recall that each toss can have 
+    two outcomes, heads or tails and
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      -\sum_{i=1}^{2} \frac{1}{5} \log_2(\frac{1}{5}) 
+      = -\frac{1}{5}\log_2(\frac{1}{5}) - \frac{4}{5}\log_2(\frac{4}{5}) 
+      = -0.2*(-2.32) - (0.8*(-0.322)) = 0.7216
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      -\sum_{i=1}^{2} \frac{1}{2} \log_2(\frac{1}{2}) 
+      = -\frac{1}{2}\log_2(\frac{1}{2}) - \frac{1}{2}\log_2(\frac{1}{2}) 
+      = -0.5*(-1) - (0.5*(-1)) = 1
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      -\sum_{i=1}^{2} \frac{2}{3} \log_2(\frac{2}{3}) 
+      = -\frac{2}{3}\log_2(\frac{2}{3}) - \frac{1}{3}\log_2(\frac{1}{3}) 
+      = -0.6667*(-0.58) - (0.3333*(-1.58)) = 0.9133
+    \]
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      -\sum_{i=1}^{2} 1\log_2(1) 
+      = 1\log_2(1) - 0\log_2(0) = 0 - 0 = 0
+    \]
+  </p>
+
+  <p>
+    where the coin with $\theta = \frac{1}{2}$ has the maximum average disorder, 
+    or has the most information for the distribution of its possible outcomes 
+    (heads or tails) and coins that are more or less biased return less 
+    information. When we consider the entropy of a random variable $X$ we want 
+    to know the average information returned for its \textbf{probability 
+    distribution}. For a coin toss this is a Bernoulli distribution where we 
+    have a probability of success and a probability of failure whereas we may 
+    have a more complex random variable that may many outcomes with varying 
+    probabilities for each outcome. An example would be a skewed die with 
+    differing probabilities for outcomes $1$ through $6$ respectively though 
+    many others are possible.
+  </p>
+
+  <p>
+    What we have described is entropy for a discrete random variable, in the 
+    case of a continuous random variable, where outcomes are not countable and 
+    the probability of any individual outcome is $0$, entropy is given by
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      H(X) = -\int_{\mathcal{X}} p(x) \log(p(x)) \, dx
+    \]
+  </p>
+
+  <p>
+    where $\mathcal{X}$ denotes the range of possible values of random variable 
+    X, $p(x)$ denotes the probability density function, and $-\log(p(x))$ denotes 
+    the density of the information content, or the information per unit, in an 
+    infinitesimal range around a point. Multiplying this value to $dx$ and 
+    $p(x)$ gives the proportion of information directly around $x$ and when we 
+    integrate over all possible outcomes $x \in X$ we obtain the weighted sum 
+    of information, or the entropy.
+  </p>
+
+  <p>
+    <a href="index.html">Return to Home Page</a>
+  </p>
+
+</body>
+</html>
